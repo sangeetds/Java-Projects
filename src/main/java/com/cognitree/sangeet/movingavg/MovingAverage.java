@@ -13,6 +13,10 @@ public class MovingAverage {
         int i = 0;
         int runningSum = 0;
 
+        getMovingAverage(sc, windowSize, input, i, runningSum);
+    }
+
+    private static void getMovingAverage(Scanner sc, int windowSize, List<Integer> input, int i, int runningSum) {
         // exits when not a number
         while (true) {
             if (getInput(sc, input)) {
