@@ -1,35 +1,34 @@
 package com.cognitree.sangeet.movingavg;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
 public class MovingAverage {
-    int i;
-    int runningSum;
-    int windowSize;
-    List<Integer> input;
+    private double runningSum; // to keep the sum at a particular point
+    private final int windowSize;
+    private final DataStore inputStore; // to hold all the input data
 
     public MovingAverage(int windowSize) {
-        this.i = 0;
         this.runningSum = 0;
         this.windowSize = windowSize;
-        this.input = new ArrayList<>();
+        this.inputStore = new DataStore(windowSize);
     }
 
-    public void getMovingAverage() {
-        this.runningSum += this.input.get(this.i);
-        this.i++;
-
-        if (this.i >= this.windowSize) {
-            printMovingAverage();
-            this.runningSum -= this.input.get(this.i - this.windowSize);
-        }
+    public void calculateMovingAverage(double num) {
+        inputStore.addData(num);
+        this.runningSum += num;
     }
 
-    private void printMovingAverage() {
-        double average = (double) this.runningSum / this.windowSize;
-        System.out.println(average);
+    // Not storing the average to save space and only
+    // calculating when asked.
+    public double getMovingAverage() {
+        double ret = (double) this.runningSum / this.windowSize;
+        this.runningSum -= this.inputStore.getInitialData();
+
+        return ret;
+    }
+
+    // To check whether `windowSize` amount of input has been
+    // given or not.
+    public boolean ready() {
+        return inputStore.getSize() >= this.windowSize;
     }
 }
 
