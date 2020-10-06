@@ -11,30 +11,38 @@ public class MovingAverage {
         List<Integer> input = new ArrayList<>();
 
         int i = 0;
-        int j = 0;
         int runningSum = 0;
 
         // exits when not a number
         while (true) {
-            try {
-                int num = Integer.parseInt(sc.next());
-                input.add(num);
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Exiting");
-                break;
-            }
+            if (getInput(sc, input)) {
+                runningSum += input.get(i);
+                i++;
 
-            runningSum += input.get(i);
-            i++;
-
-            if (i >= windowSize) {
-                double average = (double) runningSum / windowSize;
-                System.out.println(average);
-
-                runningSum -= input.get(j);
-                j++;
+                if (i >= windowSize) {
+                    printMovingAverage(i, input, runningSum, windowSize);
+                    runningSum -= input.get(i - windowSize);
+                }
             }
+            else break;
         }
+    }
+
+    private static void printMovingAverage(
+            int i, List<Integer> input, int runningSum, int windowSize
+    ) {
+        double average = (double) runningSum / windowSize;
+        System.out.println(average);
+    }
+
+    private static boolean getInput(Scanner sc, List<Integer> input) {
+        try {
+            int num = Integer.parseInt(sc.next());
+            input.add(num);
+        } catch (NumberFormatException e) {
+            System.out.println("Exiting");
+            return false;
+        }
+        return true;
     }
 }
