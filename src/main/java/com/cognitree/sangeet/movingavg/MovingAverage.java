@@ -5,48 +5,29 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MovingAverage {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int windowSize = sc.nextInt();
-        List<Integer> input = new ArrayList<>();
+    int i;
+    int runningSum;
+    int windowSize;
 
-        getMovingAverage(sc, windowSize, input);
+    public MovingAverage(int windowSize) {
+        this.i = 0;
+        this.runningSum = 0;
+        this.windowSize = windowSize;
     }
 
-    private static void getMovingAverage(Scanner sc, int windowSize, List<Integer> input) {
-        int i = 0;
-        int runningSum = 0;
+    public void getMovingAverage(List<Integer> input) {
+        this.runningSum += input.get(this.i);
+        this.i++;
 
-        // exits when not a number
-        while (true) {
-            if (getInput(sc, input)) {
-                runningSum += input.get(i);
-                i++;
-
-                if (i >= windowSize) {
-                    printMovingAverage(runningSum, windowSize);
-                    runningSum -= input.get(i - windowSize);
-                }
-            } else break;
+        if (this.i >= this.windowSize) {
+            printMovingAverage();
+            this.runningSum -= input.get(this.i - this.windowSize);
         }
     }
 
-    private static void printMovingAverage(
-            int runningSum, int windowSize
-    ) {
-        double average = (double) runningSum / windowSize;
+    private void printMovingAverage() {
+        double average = (double) this.runningSum / this.windowSize;
         System.out.println(average);
-    }
-
-    private static boolean getInput(Scanner sc, List<Integer> input) {
-        try {
-            int num = Integer.parseInt(sc.next());
-            input.add(num);
-        } catch (NumberFormatException e) {
-            System.out.println("Exiting");
-            return false;
-        }
-        return true;
     }
 }
 
