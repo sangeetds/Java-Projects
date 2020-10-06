@@ -8,25 +8,22 @@ public class Driver {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int windowSize = sc.nextInt();
-        List<Integer> input = new ArrayList<>();
         MovingAverage moveAvg = new MovingAverage(windowSize);
 
         while (true) {
-            if (getInput(sc, input)) {
-                moveAvg.getMovingAverage(input);
+            if (getInput(sc) != null) {
+                moveAvg.getMovingAverage();
             }
             else break;
         }
     }
 
-    private static boolean getInput(Scanner sc, List<Integer> input) {
+    private static Integer getInput(Scanner sc) {
         try {
-            int num = Integer.parseInt(sc.next());
-            input.add(num);
+            return sc.nextInt();
         } catch (NumberFormatException e) {
             System.out.println("Exiting");
-            return false;
+            return null;
         }
-        return true;
     }
 }

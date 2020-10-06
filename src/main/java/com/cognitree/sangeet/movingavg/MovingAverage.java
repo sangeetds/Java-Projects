@@ -8,20 +8,22 @@ public class MovingAverage {
     int i;
     int runningSum;
     int windowSize;
+    List<Integer> input;
 
     public MovingAverage(int windowSize) {
         this.i = 0;
         this.runningSum = 0;
         this.windowSize = windowSize;
+        this.input = new ArrayList<>();
     }
 
-    public void getMovingAverage(List<Integer> input) {
-        this.runningSum += input.get(this.i);
+    public void getMovingAverage() {
+        this.runningSum += this.input.get(this.i);
         this.i++;
 
         if (this.i >= this.windowSize) {
             printMovingAverage();
-            this.runningSum -= input.get(this.i - this.windowSize);
+            this.runningSum -= this.input.get(this.i - this.windowSize);
         }
     }
 
