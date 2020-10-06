@@ -10,13 +10,13 @@ public class MovingAverage {
         int windowSize = sc.nextInt();
         List<Integer> input = new ArrayList<>();
 
+        getMovingAverage(sc, windowSize, input);
+    }
+
+    private static void getMovingAverage(Scanner sc, int windowSize, List<Integer> input) {
         int i = 0;
         int runningSum = 0;
 
-        getMovingAverage(sc, windowSize, input, i, runningSum);
-    }
-
-    private static void getMovingAverage(Scanner sc, int windowSize, List<Integer> input, int i, int runningSum) {
         // exits when not a number
         while (true) {
             if (getInput(sc, input)) {
