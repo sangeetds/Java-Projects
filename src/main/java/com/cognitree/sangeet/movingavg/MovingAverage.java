@@ -27,8 +27,7 @@ public class MovingAverage {
                     printMovingAverage(i, input, runningSum, windowSize);
                     runningSum -= input.get(i - windowSize);
                 }
-            }
-            else break;
+            } else break;
         }
     }
 
@@ -50,3 +49,5 @@ public class MovingAverage {
         return true;
     }
 }
+
+
