@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Naming might not be perfect
-public class DataStore {
-    public final List<Double> inputList;
+public class DataStore<N> {
+    public final List<N> inputList;
     private final int maxSize;
     private int head; // Head index to keep constant size.
     private int tail; // Tail index to keep constant size
@@ -18,8 +18,8 @@ public class DataStore {
     }
 
     // To get data at the tail.
-    public double getInitialData() {
-        double data = this.inputList.get(this.tail);
+    public N getInitialData() {
+        N data = this.inputList.get(this.tail);
         this.tail = (this.tail + 1) % this.maxSize;
 
         return data;
@@ -33,7 +33,7 @@ public class DataStore {
     // by constantly adding and removing data.
     // Went with a constant size as adding and removing
     // data might result in resizing list.
-    public void addData(double num) {
+    public void addData(N num) {
         if (this.inputList.size() < this.maxSize) {
             this.inputList.add(num);
         }

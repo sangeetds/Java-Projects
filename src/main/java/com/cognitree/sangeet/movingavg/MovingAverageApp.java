@@ -6,8 +6,9 @@ import java.util.Scanner;
 public class MovingAverageApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the window size:");
         int windowSize = sc.nextInt();
-        MovingAverage moveAvg = new MovingAverage(windowSize);
+        MovingAverage<Double> moveAvg = new MovingAverage<>(windowSize);
 
         while (true) {
             Double num = getInput(sc);
@@ -29,7 +30,7 @@ public class MovingAverageApp {
         try {
             return sc.nextDouble();
         } catch (InputMismatchException e) {
-            System.out.println("Not a Proper Input. Exiting...");
+            System.out.println("Input needs to be a number. Exiting...");
             return null;
         }
     }
