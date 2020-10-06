@@ -24,7 +24,7 @@ public class MovingAverage {
                 i++;
 
                 if (i >= windowSize) {
-                    printMovingAverage(i, input, runningSum, windowSize);
+                    printMovingAverage(runningSum, windowSize);
                     runningSum -= input.get(i - windowSize);
                 }
             } else break;
@@ -32,7 +32,7 @@ public class MovingAverage {
     }
 
     private static void printMovingAverage(
-            int i, List<Integer> input, int runningSum, int windowSize
+            int runningSum, int windowSize
     ) {
         double average = (double) runningSum / windowSize;
         System.out.println(average);
