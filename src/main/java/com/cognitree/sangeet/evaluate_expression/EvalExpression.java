@@ -2,13 +2,11 @@ package com.cognitree.sangeet.evaluate_expression;
 
 import java.util.Stack;
 
-public class Expressions {
-    int value;
-    Stack<Character> opsBrackets;
-    Stack<Integer> number;
+public class EvalExpression {
+    Stack<Character> opsBrackets; // to Store brackets and operators
+    Stack<Integer> number; // to Store the value from the string and calculated Values
 
-    public Expressions() {
-        this.value = 0;
+    public EvalExpression() {
         this.opsBrackets = new Stack<>();
         this.number = new Stack<>();
     }
@@ -19,9 +17,12 @@ public class Expressions {
         while (index < expression.length()) {
             char ch = expression.charAt(index);
 
+            // Opening bracket simply get pushed
             if (ch == '(') {
                 this.opsBrackets.push(ch);
             }
+            // If it's a closing bracket, evaluate the expression between this
+            // and the last opening bracket
             else if (ch == ')') {
                 while (this.opsBrackets.peek() != '(') {
                     extractNumber();
@@ -29,6 +30,7 @@ public class Expressions {
 
                 this.opsBrackets.pop();
             }
+            // Stores the number given to be used later
             else if (Character.isDigit(ch)) {
                 StringBuilder numericalValue = new StringBuilder();
 
@@ -42,13 +44,16 @@ public class Expressions {
                 this.number.add(Integer.parseInt(numericalValue.toString()));
                 index--;
             }
-            else if (isOperand(ch)) {
+            // Operator and Brackets goes to same stack so as to
+            // ease the process of BODMAS calculation.
+            else if (isOperator(ch)) {
                 while (!opsBrackets.isEmpty() && hasPriority(ch, opsBrackets.peek())) {
                     extractNumber();
                 }
 
                 opsBrackets.push(ch);
             }
+            // The only other character that it accepted right now is a space.
             else if (ch != ' '){
                 System.out.println("Input contains bad element:-" + ch + ". Ignoring");
             }
@@ -63,6 +68,8 @@ public class Expressions {
         return number.pop();
     }
 
+    // Helper function which gets the last two number and the operation to be done
+    // on them.
     private void extractNumber() {
         int firstNumber = this.number.pop();
         int secondNumber = this.number.pop();
@@ -73,6 +80,7 @@ public class Expressions {
         this.number.push(newNumericalValue);
     }
 
+    // Helper function for checking the BODMAS rule.
     private boolean hasPriority(char op1, char op2) {
         if (op2 == '(' || op2 == ')') {
             return false;
@@ -80,6 +88,7 @@ public class Expressions {
         return (op1 != '*' && op1 != '/') || ((op2 != '+') && (op2 != '-'));
     }
 
+    // Simple operation helper function
     private int applyOperation(int operator, int firstNumber, int secondNumber) {
         switch (operator) {
             case '*':
@@ -98,7 +107,8 @@ public class Expressions {
         }
     }
 
-    private boolean isOperand(char ch) {
+    // Helper function to check whether the character is an operator or not
+    private boolean isOperator(char ch) {
         return ch == '*' || ch == '/' || ch == '+' || ch == '-';
     }
 }
