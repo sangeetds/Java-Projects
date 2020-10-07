@@ -1,14 +1,14 @@
 package com.cognitree.sangeet.movingavg;
 
-public class MovingAverage<N> {
+public class MovingAverage<N extends Number>  {
     private double runningSum; // to keep the sum at a particular point
     private final int windowSize;
-    private final DataStore<N> inputStore; // to hold all the input data
+    private final FixedCircularList<N> inputStore; // to hold all the input data
 
     public MovingAverage(int windowSize) {
         this.runningSum = 0;
         this.windowSize = windowSize;
-        this.inputStore = new DataStore<>(windowSize);
+        this.inputStore = new FixedCircularList<>(windowSize);
     }
 
     public void calculateMovingAverage(N num) {
@@ -19,10 +19,10 @@ public class MovingAverage<N> {
     // Not storing the average to save space and only
     // calculating when asked.
     public double getMovingAverage() {
-        double ret = this.runningSum / this.windowSize;
+        double movingAverage = this.runningSum / this.windowSize;
         this.runningSum -= (double) this.inputStore.getInitialData();
 
-        return ret;
+        return movingAverage;
     }
 
     // To check whether `windowSize` amount of input has been

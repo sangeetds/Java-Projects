@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Naming might not be perfect
-public class DataStore<N> {
+public class FixedCircularList<N extends Number> {
     public final List<N> inputList;
     private final int maxSize;
     private int head; // Head index to keep constant size.
     private int tail; // Tail index to keep constant size
 
-    public DataStore(int windowSize) {
+    public FixedCircularList(int windowSize) {
         this.maxSize = windowSize;
         this.inputList = new ArrayList<>(windowSize);
         this.head = 0;
