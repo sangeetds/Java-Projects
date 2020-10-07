@@ -1,4 +1,4 @@
-package com.cognitree.sangeet;
+package com.cognitree.sangeet.interview;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -91,9 +91,8 @@ public class CarsList {
             this.allCars.add(newCar);
             this.originSet.add(carDetail[1]);
         } catch (NumberFormatException e) {
-            // System.out.println("Detail for " + carDetail[0] + " is not valid. Not processed");
-            // System.out.print("");
-            int c = 0;
+             System.out.println("Detail for " + carDetail[0] + " is not valid. Not processed");
+             System.out.print("");
         }
     }
 }

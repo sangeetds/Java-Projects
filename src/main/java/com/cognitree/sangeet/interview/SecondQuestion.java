@@ -1,4 +1,4 @@
-package com.cognitree.sangeet;
+package com.cognitree.sangeet.interview;
 
 public class SecondQuestion {
     public static void main(String[] args) {

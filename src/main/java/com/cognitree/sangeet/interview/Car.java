@@ -1,4 +1,4 @@
-package com.cognitree.sangeet;
+package com.cognitree.sangeet.interview;
 
 // Class to hold the properties of the given car
 public class Car {
