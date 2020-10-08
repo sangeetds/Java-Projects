@@ -11,12 +11,16 @@ public class EvaluateApp {
         System.out.println("Enter the expression:");
         String expression = scan.nextLine();
 
+        // Initial validation of expression
         if (parsedExp.validateExpression(expression)) {
             System.out.println("Your expression is:- " + expression);
 
+            // Hands off the responsibility to ParseExpression which takes input
             calculateValue(evalExp, parsedExp, expression);
 
             while (true) {
+                // If validation and initial values have been taken, it asks the user
+                // to change values or not
                 if (parsedExp.valuesReady() && parsedExp.expressionReady()) {
                     System.out.println("Do you want to change any variables value?: (Enter Y for yes)");
                     String change = scan.nextLine();
@@ -52,6 +56,7 @@ public class EvaluateApp {
         }
     }
 
+    // Checks if validation has been done and then only proceeds. Breaks in case of wrong number values
     private static void calculateValue(EvalExpression evalExp, ParseExpression parseExp, String expression) {
         if (!parseExp.expressionReady()) {
             System.out.println("Error: Expression has not been validated");

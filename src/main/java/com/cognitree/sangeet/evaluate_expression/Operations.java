@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 public interface Operations {
     HashSet<Character> operators = Stream.of('+', '-', '*', '/').collect(Collectors.toCollection(HashSet::new));
 
+    // Static function to provide validation of operators.
     static boolean isOperator(char letter) {
         if (!operators.contains(letter)) {
             System.out.println("We do not support this " + letter + " operation yet");
@@ -31,6 +32,7 @@ public interface Operations {
     // Simple operation helper function
     Integer applyOperation(int firstNumber, int secondNumber);
 
+    // Extends the list of available operations.
     static void addOperation(char newOperation) {
         operators.add(newOperation);
     }

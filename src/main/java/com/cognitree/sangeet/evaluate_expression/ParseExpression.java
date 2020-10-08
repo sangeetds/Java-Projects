@@ -14,6 +14,10 @@ public class ParseExpression {
         this.expressionFlag = false;
     }
 
+    // Checks the content first and then goes for bracket testing and then
+    // saves the expression. The thinking behind saving expression was
+    // not let user mix a different expression with a different validated
+    // expression
     public boolean validateExpression(String expression) {
         for (char letter: expression.toCharArray()) {
             if (Character.isLetterOrDigit(letter) || isBlankOrBracket(letter) || letter == '_') {
@@ -38,6 +42,7 @@ public class ParseExpression {
         this.expressionFlag = true;
     }
 
+    // For validating the brackets
     private boolean validateBrackets(String expression) {
         Stack<Character> brackets = new Stack<>();
 
@@ -61,15 +66,18 @@ public class ParseExpression {
         return (letter == ' ') || (letter == '(') || (letter == ')');
     }
 
+    // It creates a new array, where it changes the variables to number
     public boolean createExpression(String expression) {
         Scanner scan = new Scanner(System.in);
         char[] tempExpression = expression.toCharArray();
         List<String> numericalExpression = new ArrayList<>();
         int index = 0;
 
+        // Goes over the given string.
         while (index < tempExpression.length) {
             char currCh = tempExpression[index];
 
+            // If it finds letter, it extracts the variable.
             if (Character.isLetter(currCh)) {
                 StringBuilder tempStrBuilder = new StringBuilder();
 
@@ -97,6 +105,7 @@ public class ParseExpression {
                 numericalExpression.add(value);
                 index--;
             }
+            // Extract out the number
             else if (Character.isDigit(currCh)) {
                 StringBuilder tempStrBuilder = new StringBuilder();
 
@@ -109,6 +118,7 @@ public class ParseExpression {
                 numericalExpression.add(tempStrBuilder.toString());
                 index--;
             }
+            // Extracts the bracket
             else if (isBlankOrBracket(currCh) || Operations.isOperator(currCh)) {
                 numericalExpression.add(String.valueOf(currCh));
             }
