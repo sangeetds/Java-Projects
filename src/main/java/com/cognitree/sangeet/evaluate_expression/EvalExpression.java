@@ -1,9 +1,9 @@
 package com.cognitree.sangeet.evaluate_expression;
 
-import java.util.Stack;
+import java.util.*;
 
 public class EvalExpression {
-    Stack<Character> opsBrackets; // to Store brackets and operators
+    Stack<String> opsBrackets; // to Store brackets and operators
     Stack<Integer> number; // to Store the value from the string and calculated Values
 
     public EvalExpression() {
@@ -11,54 +11,39 @@ public class EvalExpression {
         this.number = new Stack<>();
     }
 
-    public int evaluateExpression(String expression) {
-        int index = 0;
+    public int evaluateExpression(String[] expression) {
 
-        while (index < expression.length()) {
-            char ch = expression.charAt(index);
-
+        for (String evalChar: expression) {
             // Opening bracket simply get pushed
-            if (ch == '(') {
-                this.opsBrackets.push(ch);
+            if (evalChar.equals("(")) {
+                this.opsBrackets.push(evalChar);
             }
             // If it's a closing bracket, evaluate the expression between this
             // and the last opening bracket
-            else if (ch == ')') {
-                while (this.opsBrackets.peek() != '(') {
+            else if (evalChar.equals(")")) {
+                while (!this.opsBrackets.peek().equals("(")) {
                     extractNumber();
                 }
 
                 this.opsBrackets.pop();
             }
             // Stores the number given to be used later
-            else if (Character.isDigit(ch)) {
-                StringBuilder numericalValue = new StringBuilder();
-
-                while (index < expression.length() &&
-                        Character.isDigit(expression.charAt(index)))
-                {
-                    numericalValue.append(expression.charAt(index));
-                    index++;
-                }
-
-                this.number.add(Integer.parseInt(numericalValue.toString()));
-                index--;
+            else if (checkInteger(evalChar)) {
+                this.number.push(Integer.parseInt(evalChar));
             }
             // Operator and Brackets goes to same stack so as to
             // ease the process of BODMAS calculation.
-            else if (isOperator(ch)) {
-                while (!opsBrackets.isEmpty() && hasPriority(ch, opsBrackets.peek())) {
+            else if (isOperator(evalChar)) {
+                while (!opsBrackets.isEmpty() && hasPriority(evalChar, opsBrackets.peek())) {
                     extractNumber();
                 }
 
-                opsBrackets.push(ch);
+                opsBrackets.push(evalChar);
             }
             // The only other character that it accepted right now is a space.
-            else if (ch != ' '){
-                System.out.println("Input contains bad element:-" + ch + ". Ignoring");
-            }
-
-            index++;
+//            else if () {
+//                System.out.println("Input contains bad element:-" + evalChar + ". Ignoring");
+//            }
         }
 
         while (!opsBrackets.isEmpty()) {
@@ -68,12 +53,21 @@ public class EvalExpression {
         return number.pop();
     }
 
+    private boolean checkInteger(String evalChar) {
+        try {
+            Integer.parseInt(evalChar);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     // Helper function which gets the last two number and the operation to be done
     // on them.
     private void extractNumber() {
         int firstNumber = this.number.pop();
         int secondNumber = this.number.pop();
-        int operator = this.opsBrackets.pop();
+        String operator = this.opsBrackets.pop();
 
         int newNumericalValue = applyOperation(operator, firstNumber, secondNumber);
 
@@ -81,23 +75,24 @@ public class EvalExpression {
     }
 
     // Helper function for checking the BODMAS rule.
-    private boolean hasPriority(char op1, char op2) {
-        if (op2 == '(' || op2 == ')') {
+    private boolean hasPriority(String currentOperation, String initialOperation) {
+        if (initialOperation.equals("(") || initialOperation.equals(")")) {
             return false;
         }
-        return (op1 != '*' && op1 != '/') || ((op2 != '+') && (op2 != '-'));
+        return (!currentOperation.equals("*") && !currentOperation.equals("/"))
+                || (!(initialOperation.equals("+")) && (initialOperation.equals("-")));
     }
 
     // Simple operation helper function
-    private int applyOperation(int operator, int firstNumber, int secondNumber) {
+    private int applyOperation(String operator, int firstNumber, int secondNumber) {
         switch (operator) {
-            case '*':
+            case "*":
                 return firstNumber * secondNumber;
-            case '+':
+            case "+":
                 return firstNumber + secondNumber;
-            case '-':
+            case "-":
                 return secondNumber - firstNumber;
-            case '/':
+            case "/":
                 if (firstNumber == 0) {
                     throw new UnsupportedOperationException("Cannot Divide by zero");
                 }
@@ -108,7 +103,65 @@ public class EvalExpression {
     }
 
     // Helper function to check whether the character is an operator or not
-    private boolean isOperator(char ch) {
-        return ch == '*' || ch == '/' || ch == '+' || ch == '-';
+    private boolean isOperator(String ch) {
+        return ch.equals("*") || ch.equals("/") || ch.equals("+") || ch.equals("-");
+    }
+
+    public boolean validateExpression(String expression) {
+        for (char letter: expression.toCharArray()) {
+            if (!(Character.isLetterOrDigit(letter) || isBlankorBracket(letter) || isOperator(String.valueOf(letter)))) {
+                return false;
+            }
+        }
+
+        return validateBrackets(expression);
+    }
+
+    private boolean validateBrackets(String expression) {
+        Stack<Character> brackets = new Stack<>();
+
+        for (char letter: expression.toCharArray()) {
+            if (letter == '(') {
+                brackets.push(letter);
+            }
+            if (letter == ')') {
+                if (brackets.isEmpty()) {
+                    return false;
+                }
+
+                brackets.pop();
+            }
+        }
+
+        return brackets.isEmpty();
+    }
+
+    private boolean isBlankorBracket(char letter) {
+        return (letter == ' ') || (letter == '(') || (letter == ')');
+    }
+
+    public String[] createExpression(String expression) {
+        Scanner scan = new Scanner(System.in);
+        String[] numericalExpression = expression.split("");
+
+        for (int i = 0; i < numericalExpression.length; i++) {
+            char isLetter = numericalExpression[i].charAt(0);
+
+            if (Character.isLetter(isLetter)) {
+                System.out.println("Please provide the value for: " + isLetter);
+                String value = scan.nextLine();
+
+                if (checkInteger(value)) {
+                    numericalExpression[i] = value;
+                }
+                else {
+                    return null;
+                }
+            }
+        }
+
+        System.out.println("Your expression is:- " + String.join("", numericalExpression));
+
+        return numericalExpression;
     }
 }

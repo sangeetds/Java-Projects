@@ -10,7 +10,19 @@ public class EvaluateApp {
         System.out.println("Enter the expression:");
         String expression = scan.nextLine();
 
-        int value = evalExp.evaluateExpression(expression);
-        System.out.println(value);
+        if (evalExp.validateExpression(expression)) {
+            String[] newExpression = evalExp.createExpression(expression);
+
+            if (newExpression != null) {
+                int value = evalExp.evaluateExpression(newExpression);
+                System.out.println("It's evaluated value is:- " + value);
+            }
+            else {
+                System.out.println("Not a valid input");
+            }
+        }
+        else {
+            System.out.println("Not a correct expression");
+        }
     }
 }
