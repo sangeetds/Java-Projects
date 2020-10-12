@@ -1,10 +1,11 @@
 package com.cognitree.sangeet.evaluate_expression;
 
-import java.util.*;
+import java.util.EmptyStackException;
+import java.util.Stack;
 
 public class EvalExpression {
     private final Stack<String> opsBrackets; // to Store brackets and operators
-    private final Stack<Integer> number; // to Store the value from the string and calculated Values
+    private final Stack<Double> number; // to Store the value from the string and calculated Values
     private final OperatorFactory operatorFactory; // to simulate Operator functions
 
     public EvalExpression() {
@@ -13,14 +14,14 @@ public class EvalExpression {
         this.operatorFactory = new OperatorFactory();
     }
 
-    public Integer evaluateExpression(ParseExpression parseExpression) {
-        if (!parseExpression.expressionReady()) {
+    public Double evaluateExpression(ExpressionParser expressionParser, Expression exp) {
+        if (!expressionParser.expressionReady()) {
             return null;
         }
 
-        String[] expression = parseExpression.getExpression();
+        String[] expression = exp.getFinalExpression();
 
-        for (String evalChar: expression) {
+        for (String evalChar : expression) {
             // Opening bracket simply get pushed
             if (evalChar.equals("(")) {
                 this.opsBrackets.push(evalChar);
@@ -29,20 +30,22 @@ public class EvalExpression {
             // and the last opening bracket
             else if (evalChar.equals(")")) {
                 while (!this.opsBrackets.peek().equals("(")) {
-                    if (!extractNumber()) break;
+                    if (!extractNumber()) {
+                        return null;
+                    }
                 }
 
                 this.opsBrackets.pop();
             }
             // Stores the number given to be used later
-            else if (ParseExpressionUtil.checkInteger(evalChar)) {
-                this.number.push(Integer.parseInt(evalChar));
+            else if (ExpressionParserUtil.checkInteger(evalChar)) {
+                this.number.push(Double.parseDouble(evalChar));
             }
             // Operator and Brackets goes to same stack so as to
             // ease the process of BODMAS calculation.
-            else if (!evalChar.equals(" ") && Operations.isOperator(evalChar)) {
+            else if (!evalChar.equals(" ") && OperatorFactory.isOperator(evalChar)) {
                 while (!opsBrackets.isEmpty() && hasPriority(evalChar, opsBrackets.peek())) {
-                    if (extractNumber()) break;
+                    if (!extractNumber()) return null;
                 }
 
                 opsBrackets.push(evalChar);
@@ -63,16 +66,23 @@ public class EvalExpression {
     // Helper function which gets the last two number and the operation to be done
     // on them.
     private boolean extractNumber() {
-        int firstNumber = this.number.pop();
-        int secondNumber = this.number.pop();
-        String operation = this.opsBrackets.pop();
-        Operations operator = operatorFactory.getOperator(operation);
+        double firstNumber;
+        double secondNumber;
+        String operation;
 
-        if (operator == null) {
+        try {
+            firstNumber = this.number.pop();
+            secondNumber = this.number.pop();
+            operation = this.opsBrackets.pop();
+        } catch (EmptyStackException e) {
+            System.out.println("Expression not verified properly");
             return false;
         }
-        else {
-            Integer newNumericalValue = operator.applyOperation(firstNumber, secondNumber);
+
+        Operator operator = operatorFactory.getOperator(operation);
+
+        if (operator != null) {
+            Double newNumericalValue = operator.evaluate(firstNumber, secondNumber);
 
             if (newNumericalValue == null) {
                 return false;
@@ -81,6 +91,8 @@ public class EvalExpression {
             this.number.push(newNumericalValue);
             return true;
         }
+
+        return false;
     }
 
     // Helper function for checking the BODMAS rule.

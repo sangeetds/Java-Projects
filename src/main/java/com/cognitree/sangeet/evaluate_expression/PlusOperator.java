@@ -1,13 +1,8 @@
 package com.cognitree.sangeet.evaluate_expression;
 
-public class PlusOperator implements Operations {
-
-    public PlusOperator() {
-        Operations.addOperation('+');
-    }
-
+public class PlusOperator implements Operator {
     @Override
-    public Integer applyOperation(int firstNumber, int secondNumber) {
+    public Double evaluate(double firstNumber, double secondNumber) {
         return firstNumber + secondNumber;
     }
 }

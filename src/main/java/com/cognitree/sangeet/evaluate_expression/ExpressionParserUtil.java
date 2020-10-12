@@ -1,9 +1,9 @@
 package com.cognitree.sangeet.evaluate_expression;
 
-public class ParseExpressionUtil {
+public class ExpressionParserUtil {
     public static boolean checkInteger(String evalChar) {
         try {
-            Integer.parseInt(evalChar);
+            Double.parseDouble(evalChar);
             return true;
         } catch (NumberFormatException e) {
             return false;
