@@ -1,4 +1,4 @@
-package com.cognitree.sangeet;
+package com.cognitree.sangeet.interview;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
