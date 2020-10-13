@@ -15,30 +15,30 @@ public class OperatorFactory {
                 return new MultiplyOperator();
             } else if (op.equalsIgnoreCase("/")) {
                 return new DivisionOperator();
+            } else if (op.equalsIgnoreCase("~")) {
+                return new NegateOperator();
             }
         }
 
         return null;
     }
 
-    static HashSet<Character> operators = Stream.of('+', '-', '*', '/').collect(Collectors.toCollection(HashSet::new));
+    static HashSet<Character> operators = Stream.of('+', '-', '*', '/', '~').collect(Collectors.toCollection(HashSet::new));
 
     // Static function to provide validation of operators.
     static boolean isOperator(char letter) {
-        if (!operators.contains(letter)) {
-            System.out.println("We do not support this " + letter + " operation yet");
-        }
-
         return operators.contains(letter);
     }
 
+    static boolean isOperator(char letter, int index, char[] arrayExpression) {
+        return letter == '-' &&
+                index < arrayExpression.length - 1 &&
+                index > 0 &&
+                isOperator(arrayExpression[index - 1]) &&
+                ExpressionParserUtil.checkInteger(String.valueOf(arrayExpression[index + 1]));
+    }
+
     static boolean isOperator(String letter) {
-        if (letter.length() > 1) return false;
-
-        if (!operators.contains(letter.charAt(0))) {
-            return false;
-        }
-
-        return true;
+        return letter.length() <= 1 && operators.contains(letter.charAt(0));
     }
 }

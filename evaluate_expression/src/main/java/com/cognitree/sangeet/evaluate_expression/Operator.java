@@ -1,9 +1,9 @@
 package com.cognitree.sangeet.evaluate_expression;
 
 
-public interface Operator {
+abstract class Operator {
     // Simple operation helper function
-    Double evaluate(double firstNumber, double secondNumber);
+    abstract Double[] evaluate(double[] operands);
 
     // Extends the list of available operations.
 }
