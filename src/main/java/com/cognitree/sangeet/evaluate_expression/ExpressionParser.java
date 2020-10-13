@@ -29,9 +29,9 @@ public class ExpressionParser {
     // not let user mix a different expression with a different validated
     // expression
     private boolean validateExpression(String expression) {
-        for (char letter : expression.toCharArray()) {
-            if (!(Character.isLetterOrDigit(letter) || isBlankOrBracket(letter) || letter == '_' || OperatorFactory.isOperator(letter))) {
-                System.out.println(letter + " shouldn't be here and is causing problems.");
+        for (char letter : expression.replace(" ", "").toCharArray()) {
+            if (!(Character.isLetterOrDigit(letter) || (letter == '(') || (letter == ')') || letter == '_' || OperatorFactory.isOperator(letter))) {
+                System.out.println("'" + letter + "'" + " shouldn't be here and is causing problems.");
                 return false;
             }
         }
@@ -60,13 +60,9 @@ public class ExpressionParser {
         return brackets.isEmpty();
     }
 
-    private boolean isBlankOrBracket(char letter) {
-        return (letter == ' ') || (letter == '(') || (letter == ')');
-    }
-
     // It creates a new array, where it changes the variables to number
     public List<String> createExpression(Expression expression) {
-        char[] tempExpression = expression.getExpression().toCharArray();
+        char[] tempExpression = expression.getExpression().replace(" ", "").toCharArray();
         List<String> numericalExpression = new ArrayList<>();
         int index = 0;
 
@@ -101,7 +97,13 @@ public class ExpressionParser {
                 index--;
             }
             // Extracts the bracket
-            else if (isBlankOrBracket(currCh) || OperatorFactory.isOperator(currCh)) {
+            else if ((currCh == '(') || (currCh == ')')) {
+                numericalExpression.add(String.valueOf(currCh));
+            }
+            else if (OperatorFactory.isOperator(currCh, index, tempExpression)) {
+                numericalExpression.add("~");
+            }
+            else if (OperatorFactory.isOperator(currCh)) {
                 numericalExpression.add(String.valueOf(currCh));
             }
 

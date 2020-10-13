@@ -1,9 +1,9 @@
 package com.cognitree.sangeet.evaluate_expression;
 
-public class SubtractOperator implements Operator {
+public class SubtractOperator extends Operator {
 
     @Override
-    public Double evaluate(double firstNumber, double secondNumber) {
-        return secondNumber - firstNumber;
+    public Double[] evaluate(double[] operands) {
+        return new Double[]{ operands[1] - operands[0] };
     }
 }

@@ -1,5 +1,6 @@
 package com.cognitree.sangeet.evaluate_expression;
 
+import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -82,13 +83,13 @@ public class EvalExpression {
         Operator operator = operatorFactory.getOperator(operation);
 
         if (operator != null) {
-            Double newNumericalValue = operator.evaluate(firstNumber, secondNumber);
+            Double[] newNumericalValue = operator.evaluate(new double[]{firstNumber, secondNumber});
 
             if (newNumericalValue == null) {
                 return false;
             }
 
-            this.number.push(newNumericalValue);
+            this.number.addAll(Arrays.asList(newNumericalValue));
             return true;
         }
 
@@ -97,7 +98,7 @@ public class EvalExpression {
 
     // Helper function for checking the BODMAS rule.
     private boolean hasPriority(String currentOperation, String initialOperation) {
-        if (initialOperation.equals("(") || initialOperation.equals(")")) {
+        if (initialOperation.equals("(") || initialOperation.equals(")") || currentOperation.equals("~")) {
             return false;
         }
         return (!currentOperation.equals("*") && !currentOperation.equals("/"))

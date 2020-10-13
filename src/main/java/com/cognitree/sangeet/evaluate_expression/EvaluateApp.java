@@ -14,7 +14,7 @@ public class EvaluateApp {
         Expression expression = new Expression(exp);
         ExpressionParser parsedExp = new ExpressionParser(expression);
 
-        System.out.println("Your expression is:- " + expression.getExpression());
+        System.out.println("Your expression is:- " + expression.getExpression().trim());
 
         // Hands off the responsibility to ParseExpression which takes input
         if (!calculateValue(evalExp, parsedExp, expression, scan)) {
@@ -94,7 +94,7 @@ public class EvaluateApp {
             }
         }
 
-        System.out.println("Your expression with values is:- " + String.join("", modifiedExpression));
+//        System.out.println("Your expression with values is:- " + String.join("", modifiedExpression));
 
         parseExp.setValuesReady();
         parseExp.setExpression(expression, modifiedExpression);

@@ -1,9 +1,8 @@
 package com.cognitree.sangeet.evaluate_expression;
 
-public class MultiplyOperator extends Operator {
-
+public class NegateOperator extends Operator{
     @Override
     public Double[] evaluate(double[] operands) {
-        return new Double[]{ operands[1] * operands[0] };
+        return new Double[]{ -operands[0], operands[1] };
     }
 }
