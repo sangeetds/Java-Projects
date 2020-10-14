@@ -5,14 +5,14 @@ import java.util.Iterator;
 public class DoubleStack<T, E> {
     private Object[] arrayStack;
     public int length;
-    public int firstIndex;
-    public int secondIndex;
+    public int forwardIndex;
+    public int backwardIndex;
 
     public DoubleStack(int initialSize) {
         this.arrayStack = new Object[initialSize];
         this.length = initialSize;
-        this.firstIndex = -1;
-        this.secondIndex = initialSize;
+        this.forwardIndex = -1;
+        this.backwardIndex = initialSize;
     }
 
     public DoubleStack() {
@@ -20,57 +20,57 @@ public class DoubleStack<T, E> {
     }
 
     public boolean isBothStackEmpty() {
-        return this.firstIndex < 0 && this.secondIndex >= this.length;
+        return this.forwardIndex < 0 && this.backwardIndex >= this.length;
     }
 
     public boolean isFirstStackEmpty() {
-        return this.firstIndex < 0;
+        return this.forwardIndex < 0;
     }
 
     public boolean isSecondStackEmpty() {
-        return this.secondIndex >= this.length;
+        return this.backwardIndex >= this.length;
     }
 
     public T firstStackPeek() {
-        @SuppressWarnings("unchecked") final T firstStackElement = (T) this.arrayStack[firstIndex];
+        @SuppressWarnings("unchecked") final T firstStackElement = (T) this.arrayStack[forwardIndex];
 
         return firstStackElement;
     }
 
     public E secondStackPeek() {
-        @SuppressWarnings("unchecked") final E secondStackElement = (E) this.arrayStack[secondIndex];
+        @SuppressWarnings("unchecked") final E secondStackElement = (E) this.arrayStack[backwardIndex];
 
         return secondStackElement;
     }
 
     public void firstStackPush(T value) {
-        if (firstIndex + 1 == secondIndex) upSize();
+        if (forwardIndex + 1 == backwardIndex) upSize();
 
-        this.firstIndex++;
+        this.forwardIndex++;
 
-        this.arrayStack[firstIndex] = value;
+        this.arrayStack[forwardIndex] = value;
     }
 
     public void secondStackPush(E value) {
-        if (firstIndex + 1 == secondIndex) upSize();
+        if (forwardIndex + 1 == backwardIndex) upSize();
 
-        this.secondIndex--;
+        this.backwardIndex--;
 
-        this.arrayStack[secondIndex] = value;
+        this.arrayStack[backwardIndex] = value;
     }
 
     public T firstStackPop() {
-        @SuppressWarnings("unchecked") final T firstStackElement = (T) this.arrayStack[this.firstIndex];
+        @SuppressWarnings("unchecked") final T firstStackElement = (T) this.arrayStack[this.forwardIndex];
 
-        this.firstIndex--;
+        this.forwardIndex--;
 
         return firstStackElement;
     }
 
     public T secondStackPop() {
-        @SuppressWarnings("unchecked") final T secondStackElement = (T) this.arrayStack[this.secondIndex];
+        @SuppressWarnings("unchecked") final T secondStackElement = (T) this.arrayStack[this.backwardIndex];
 
-        this.secondIndex++;
+        this.backwardIndex++;
 
         return secondStackElement;
     }
@@ -84,49 +84,49 @@ public class DoubleStack<T, E> {
         Object[] tempArrayStack = new Object[newLength];
 
         int index = 0;
-        while (index <= this.firstIndex) {
+        while (index <= this.forwardIndex) {
             tempArrayStack[index] = this.arrayStack[index];
             index++;
         }
 
         index = newLength - 1;
 
-        while (index >= newLength - this.secondIndex) {
+        while (index >= newLength - this.backwardIndex) {
             tempArrayStack[index] = this.arrayStack[index - this.length];
             index--;
         }
 
-        this.secondIndex = newLength - (this.length - this.secondIndex);
+        this.backwardIndex = newLength - (this.length - this.backwardIndex);
         this.length = newLength;
         this.arrayStack = tempArrayStack;
     }
 
-    public Iterator<T> getForwardStackIterator() {
+    public Iterator<T> getFirstStackIterator() {
 
-        return new ForwardStackIterator<>();
+        return new FirstStackIterator<>();
     }
 
-    public Iterator<E> getBackwardStackIterator() {
+    public Iterator<E> getSecondStackIterator() {
 
-        return new BackwardStackIterator<>();
+        return new SecondStackIterator<>();
     }
 
-    public Iterable<T> getForwardStackIterable() {
+    public Iterable<T> getFirstStackIterable() {
 
-        return new ForwardStackIterator<>();
+        return new FirstStackIterator<>();
     }
 
-    public Iterable<E> getBackwardStackIterable() {
+    public Iterable<E> getSecondStackIterable() {
 
-        return new BackwardStackIterator<>();
+        return new SecondStackIterator<>();
     }
 
-    private class ForwardStackIterator<A> implements Iterator<A>, Iterable<A> {
+    private class FirstStackIterator<A> implements Iterator<A>, Iterable<A> {
         int iteratorIndex = 0;
 
         @Override
         public boolean hasNext() {
-            return iteratorIndex <= firstIndex;
+            return iteratorIndex <= forwardIndex;
         }
 
         @Override
@@ -144,12 +144,12 @@ public class DoubleStack<T, E> {
         }
     }
 
-    private class BackwardStackIterator<B> implements Iterator<B>, Iterable<B> {
+    private class SecondStackIterator<B> implements Iterator<B>, Iterable<B> {
         int iteratorIndex = length - 1;
 
         @Override
         public boolean hasNext() {
-            return this.iteratorIndex >= secondIndex;
+            return this.iteratorIndex >= backwardIndex;
         }
 
         @Override

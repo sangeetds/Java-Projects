@@ -11,23 +11,23 @@ public class StackApp {
         doubleStack.firstStackPush(2);
         doubleStack.secondStackPush("String");
 
-        Iterator<Integer> f = doubleStack.getForwardStackIterator();
+        Iterator<Integer> f = doubleStack.getFirstStackIterator();
 
         while (f.hasNext()) {
             System.out.println(f.next());
         }
 
-        Iterator<String> g = doubleStack.getBackwardStackIterator();
+        Iterator<String> g = doubleStack.getSecondStackIterator();
 
         while (g.hasNext()) {
             System.out.println(g.next());
         }
 
-        for (int c: doubleStack.getForwardStackIterable()) {
+        for (int c: doubleStack.getFirstStackIterable()) {
             System.out.println(c);
         }
 
-        for (String s: doubleStack.getBackwardStackIterable()) {
+        for (String s: doubleStack.getSecondStackIterable()) {
             System.out.println(s);
         }
     }
