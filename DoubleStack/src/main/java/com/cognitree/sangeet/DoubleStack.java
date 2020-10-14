@@ -1,16 +1,20 @@
 package com.cognitree.sangeet;
 
-public class DoubleStack<T> {
+public class DoubleStack<T, E> {
     private Object[] arrayStack;
     public int length;
     public int firstIndex;
     public int secondIndex;
 
-    public DoubleStack() {
-        this.arrayStack = new Object[2];
-        this.length = 2;
+    public DoubleStack(int initialSize) {
+        this.arrayStack = new Object[initialSize];
+        this.length = initialSize;
         this.firstIndex = -1;
-        this.secondIndex = 2;
+        this.secondIndex = initialSize;
+    }
+
+    public DoubleStack() {
+        this(10);
     }
 
     public boolean isBothStackEmpty() {
@@ -31,8 +35,8 @@ public class DoubleStack<T> {
         return firstStackElement;
     }
 
-    public T secondStackPeek() {
-        @SuppressWarnings("unchecked") final T secondStackElement = (T) this.arrayStack[secondIndex];
+    public E secondStackPeek() {
+        @SuppressWarnings("unchecked") final E secondStackElement = (E) this.arrayStack[secondIndex];
 
         return secondStackElement;
     }
@@ -45,8 +49,8 @@ public class DoubleStack<T> {
         this.arrayStack[firstIndex] = value;
     }
 
-    public void secondStackPush(T value) {
-        if (firstIndex + 1 == secondIndex) downSize();
+    public void secondStackPush(E value) {
+        if (firstIndex + 1 == secondIndex) upSize();
 
         this.secondIndex--;
 
@@ -54,15 +58,15 @@ public class DoubleStack<T> {
     }
 
     public T firstStackPop() {
-        @SuppressWarnings("unchecked") final T secondStackElement = (T) this.arrayStack[this.firstIndex];
+        @SuppressWarnings("unchecked") final T firstStackElement = (T) this.arrayStack[this.firstIndex];
 
         this.firstIndex--;
 
-        return secondStackElement;
+        return firstStackElement;
     }
 
     public T secondStackPop() {
-        @SuppressWarnings("unchecked") final T secondStackElement = (T) this.arrayStack[secondIndex];
+        @SuppressWarnings("unchecked") final T secondStackElement = (T) this.arrayStack[this.secondIndex];
 
         this.secondIndex++;
 
@@ -71,11 +75,6 @@ public class DoubleStack<T> {
 
     private void upSize() {
         int newLength = this.length * 2;
-        copyElements(newLength);
-    }
-
-    private void downSize() {
-        int newLength = this.length / 2;
         copyElements(newLength);
     }
 
