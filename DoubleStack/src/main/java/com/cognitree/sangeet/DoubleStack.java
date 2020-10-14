@@ -1,5 +1,7 @@
 package com.cognitree.sangeet;
 
+import java.util.Iterator;
+
 public class DoubleStack<T, E> {
     private Object[] arrayStack;
     public int length;
@@ -97,5 +99,71 @@ public class DoubleStack<T, E> {
         this.secondIndex = newLength - (this.length - this.secondIndex);
         this.length = newLength;
         this.arrayStack = tempArrayStack;
+    }
+
+    public Iterator<T> getForwardStackIterator() {
+
+        return new ForwardStackIterator<>();
+    }
+
+    public Iterator<E> getBackwardStackIterator() {
+
+        return new BackwardStackIterator<>();
+    }
+
+    public Iterable<T> getForwardStackIterable() {
+
+        return new ForwardStackIterator<>();
+    }
+
+    public Iterable<E> getBackwardStackIterable() {
+
+        return new BackwardStackIterator<>();
+    }
+
+    private class ForwardStackIterator<A> implements Iterator<A>, Iterable<A> {
+        int iteratorIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return iteratorIndex <= firstIndex;
+        }
+
+        @Override
+        public A next() {
+            @SuppressWarnings("unchecked") final A stackElement = (A) arrayStack[iteratorIndex];
+
+            this.iteratorIndex++;
+
+            return stackElement;
+        }
+
+        @Override
+        public Iterator<A> iterator() {
+            return this;
+        }
+    }
+
+    private class BackwardStackIterator<B> implements Iterator<B>, Iterable<B> {
+        int iteratorIndex = length - 1;
+
+        @Override
+        public boolean hasNext() {
+            return this.iteratorIndex >= secondIndex;
+        }
+
+        @Override
+        public B next() {
+            @SuppressWarnings("unchecked") final B stackElement = (B) arrayStack[iteratorIndex];
+
+            this.iteratorIndex--;
+
+            return stackElement;
+        }
+
+        @Override
+        public Iterator<B> iterator() {
+            return this;
+        }
     }
 }
