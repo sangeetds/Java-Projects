@@ -1,4 +1,4 @@
-package main.sangeet.movingavg;
+package com.cognitree.sangeet;
 
 public class MovingAverage<N extends Number>  {
     private double runningSum; // to keep the sum at a particular point

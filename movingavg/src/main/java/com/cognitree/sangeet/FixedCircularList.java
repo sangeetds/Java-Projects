@@ -1,4 +1,4 @@
-package main.sangeet.movingavg;
+package com.cognitree.sangeet;
 
 import java.util.ArrayList;
 import java.util.List;
