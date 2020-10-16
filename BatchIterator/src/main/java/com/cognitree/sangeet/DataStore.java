@@ -1,31 +1,22 @@
 package com.cognitree.sangeet;
 
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 
-public class StreamingStore<T> {
+public class DataStore<T> {
     private final List<T> data;
-    private int modification;
 
-    public StreamingStore() {
+    public DataStore() {
         this.data = new ArrayList<>();
-        this.modification = 0;
     }
 
     public void storeData(T dataPoint) {
         this.data.add(dataPoint);
-        this.modification++;
     }
 
     public T getData(int point) {
         return this.data.get(point);
-    }
-
-    public void removeData(T dataPoint) {
-        this.data.remove(dataPoint);
-        this.modification++;
     }
 
     public Iterator<Batch<T>> getIterator(int batchSize) {
@@ -35,12 +26,10 @@ public class StreamingStore<T> {
     private class BatchIterator<E> implements Iterator<Batch<E>>, Iterable<Batch<E>> {
         int index;
         int size;
-        int currentModification;
 
         public BatchIterator(int len) {
             this.size = len;
             this.index = 0;
-            this.currentModification = modification;
         }
 
         @Override
@@ -55,12 +44,14 @@ public class StreamingStore<T> {
 
         @Override
         public Batch<E> next() {
-            if (this.currentModification != modification) {
-                throw new ConcurrentModificationException();
-            }
-            Batch<E> currBatch = new Batch<>(size, index, data);
+//            System.out.println(index + " " + size + " " + data.get(0));
+//            if (!hasNext()) {
+//                throw
+//            }
 
-            this.index ++;
+            Batch<E> currBatch = new Batch<E>(size, index, data);
+
+            index += size;
 
             return currBatch;
         }

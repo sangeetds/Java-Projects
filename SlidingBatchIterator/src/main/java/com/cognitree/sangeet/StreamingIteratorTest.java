@@ -1,8 +1,5 @@
 package com.cognitree.sangeet;
 
-import main.com.cognitree.sangeet.Batch;
-import main.com.cognitree.sangeet.Student;
-
 import java.util.Iterator;
 
 public class StreamingIteratorTest {
