@@ -58,6 +58,11 @@ public class StreamingStore<T> {
             if (this.currentModification != modification) {
                 throw new ConcurrentModificationException();
             }
+
+            if (!this.hasNext()) {
+                throw new RuntimeException("Index out of bounds");
+            }
+
             Batch<E> currBatch = new Batch<>(size, index, data);
 
             this.index ++;
