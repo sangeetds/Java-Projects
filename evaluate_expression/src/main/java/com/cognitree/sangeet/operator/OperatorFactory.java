@@ -1,4 +1,6 @@
-package com.cognitree.sangeet;
+package com.cognitree.sangeet.operator;
+
+import com.cognitree.sangeet.ExpressionParserUtil;
 
 import java.util.HashSet;
 import java.util.stream.Collectors;
@@ -23,14 +25,14 @@ public class OperatorFactory {
         return null;
     }
 
-    static HashSet<Character> operators = Stream.of('+', '-', '*', '/', '~').collect(Collectors.toCollection(HashSet::new));
+    static final HashSet<Character> operators = Stream.of('+', '-', '*', '/', '~').collect(Collectors.toCollection(HashSet::new));
 
     // Static function to provide validation of operators.
-    static boolean isOperator(char letter) {
+    public static boolean isOperator(char letter) {
         return operators.contains(letter);
     }
 
-    static boolean isOperator(char letter, int index, char[] arrayExpression) {
+    public static boolean isOperator(char letter, int index, char[] arrayExpression) {
         return letter == '-' &&
                 index < arrayExpression.length - 1 &&
                 index > 0 &&
@@ -38,7 +40,7 @@ public class OperatorFactory {
                 ExpressionParserUtil.checkInteger(String.valueOf(arrayExpression[index + 1]));
     }
 
-    static boolean isOperator(String letter) {
+    public static boolean isOperator(String letter) {
         return letter.length() <= 1 && operators.contains(letter.charAt(0));
     }
 }

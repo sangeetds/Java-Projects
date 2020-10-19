@@ -1,12 +1,14 @@
 package com.cognitree.sangeet;
 
+import com.cognitree.sangeet.operator.OperatorFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
-public class ExpressionParser {
-    public final HashMap<String, String> variableMap;
+final public class ExpressionParser {
+    private final HashMap<String, String> variableMap;
     private boolean isValueSet;
     private final boolean isExpSet;
 
@@ -113,11 +115,11 @@ public class ExpressionParser {
         return numericalExpression;
     }
 
-    void setExpression(Expression expression, List<String> numericalExpression) {
+    public void setExpression(Expression expression, List<String> numericalExpression) {
         expression.setFinalExpression(numericalExpression);
     }
 
-    void setValuesReady() {
+    public void setValuesReady() {
         this.isValueSet = true;
     }
 

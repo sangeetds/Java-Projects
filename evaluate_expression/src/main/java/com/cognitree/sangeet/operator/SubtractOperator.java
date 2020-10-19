@@ -1,4 +1,4 @@
-package com.cognitree.sangeet;
+package com.cognitree.sangeet.operator;
 
 public class SubtractOperator extends Operator {
 

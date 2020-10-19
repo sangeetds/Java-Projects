@@ -4,9 +4,9 @@ import java.util.Iterator;
 
 public class DoubleStack<T, E> {
     private Object[] arrayStack;
-    public int length;
-    public int forwardIndex;
-    public int backwardIndex;
+    private int length;
+    private int forwardIndex;
+    private int backwardIndex;
 
     public DoubleStack(int initialSize) {
         this.arrayStack = new Object[initialSize];
