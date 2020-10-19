@@ -1,5 +1,3 @@
-package com.cognitree.sangeet;
-
 import java.util.Iterator;
 
 public class StreamingIteratorTest {

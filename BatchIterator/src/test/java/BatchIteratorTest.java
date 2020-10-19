@@ -1,5 +1,3 @@
-package com.cognitree.sangeet;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
@@ -23,8 +21,6 @@ public class BatchIteratorTest {
         while (dataIterator.hasNext()) {
             System.out.println(dataIterator.next());
         }
-
-//        System.out.println(dataIterator.next());
 
         List<Student> arr = new ArrayList<>();
 
