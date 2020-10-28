@@ -20,7 +20,7 @@ public class ReportsProvider {
         return reportsProvider;
     }
 
-    public List<Report> getAggregator() {
+    public List<Report> getReports() {
         return reports;
     }
 }

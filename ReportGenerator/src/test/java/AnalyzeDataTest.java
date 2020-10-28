@@ -8,7 +8,7 @@ public class AnalyzeDataTest {
         BufferedReader fileScanner;
 
         try {
-            fileScanner = new BufferedReader(new InputStreamReader(new FileInputStream("yoochoose-buys.txt"), StandardCharsets.UTF_8));
+            fileScanner = new BufferedReader(new InputStreamReader(new FileInputStream("dataset.txt"), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             return;

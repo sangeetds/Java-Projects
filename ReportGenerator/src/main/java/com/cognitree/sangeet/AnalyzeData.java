@@ -13,12 +13,11 @@ public class AnalyzeData {
 
     public AnalyzeData(BufferedReader fileScanner) throws IOException {
         this.reportsProvider = ReportsProvider.getReportsProvider();
-        this.reports = reportsProvider.getAggregator();
+        this.reports = reportsProvider.getReports();
 
         String line;
         while ((line = fileScanner.readLine()) != null) {
-            //TimeTaking
-            ReportData currentData = new ReportData(line.split(","));
+            BuyData currentData = new BuyData(line.split(","));
             aggregateData(currentData);
         }
 
@@ -26,14 +25,10 @@ public class AnalyzeData {
     }
 
     public void generateAllReports() {
-        for (Report report: this.reports) {
-            report.generate();
-        }
+        this.reports.forEach(Report::generate);
     }
 
-    private void aggregateData(ReportData currentData) {
-        for (Report report : this.reports) {
-            report.aggregate(currentData);
-        }
+    private void aggregateData(BuyData currentData) {
+        this.reports.forEach(report -> report.aggregate(currentData));
     }
 }

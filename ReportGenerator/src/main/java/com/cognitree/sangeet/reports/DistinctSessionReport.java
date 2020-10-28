@@ -1,12 +1,11 @@
 package com.cognitree.sangeet.reports;
 
-import com.cognitree.sangeet.ReportData;
+import com.cognitree.sangeet.BuyData;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 class DistinctSessionReport implements Report {
     HashMap<Integer, List<Integer>> sessionList;
@@ -20,20 +19,18 @@ class DistinctSessionReport implements Report {
     }
 
     @Override
-    public void aggregate(ReportData reportData) {
+    public void aggregate(BuyData buyData) {
         count++;
-        sessionList.computeIfAbsent(reportData.getItemId(), k -> new ArrayList<>());
-        sessionList.get(reportData.getItemId()).add(reportData.getSessionId());
+        sessionList.computeIfAbsent(buyData.getItemId(), k -> new ArrayList<>());
+        sessionList.get(buyData.getItemId()).add(buyData.getSessionId());
     }
 
     @Override
     public void generate() {
-        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count);
+        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20);
 
-        for (Map.Entry<Integer, List<Integer>> itemCountEntry: sessionList.entrySet()) {
-            byte[] buffer = (itemCountEntry.getKey() + " " + itemCountEntry.getValue()).getBytes();
-            byteBuffer.put(buffer);
-            byteBuffer.put("\n".getBytes());
-        }
+        sessionList.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));
+
+        FileBufferUtil.closeFile();
     }
 }

@@ -1,6 +1,6 @@
 package com.cognitree.sangeet.reports;
 
-import com.cognitree.sangeet.ReportData;
+import com.cognitree.sangeet.BuyData;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -17,21 +17,21 @@ class AverageQuantityReport extends FileBufferUtil implements Report {
     }
 
     @Override
-    public void aggregate(ReportData reportData) {
+    public void aggregate(BuyData buyData) {
         count++;
-        averageQuantity.computeIfAbsent(reportData.getItemId(), k -> new ArrayList<>());
-        averageQuantity.get(reportData.getItemId()).add(reportData.getSessionId());
+        averageQuantity.computeIfAbsent(buyData.getItemId(), k -> new ArrayList<>());
+        averageQuantity.get(buyData.getItemId()).add(buyData.getSessionId());
     }
 
     @Override
     public void generate() {
-        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count);
+        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 14);
 
-        for (Map.Entry<Integer, List<Integer>> itemCountEntry : averageQuantity.entrySet()) {
-            Double avgQuantity = new HashSet<>(itemCountEntry.getValue()).size() / (double) itemCountEntry.getValue().size();
-            byte[] buffer = (itemCountEntry.getKey() + " " + avgQuantity).getBytes();
-            byteBuffer.put(buffer);
-            byteBuffer.put("\n".getBytes());
-        }
+        averageQuantity.forEach((key, value) -> {
+            Double avgQuantity = new HashSet<>(value).size() / (double) value.size();
+            byteBuffer.put((key + " " + avgQuantity + "\n").getBytes());
+        });
+
+        FileBufferUtil.closeFile();
     }
 }

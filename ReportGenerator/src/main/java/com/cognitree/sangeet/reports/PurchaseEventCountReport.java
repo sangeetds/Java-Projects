@@ -1,10 +1,9 @@
 package com.cognitree.sangeet.reports;
 
-import com.cognitree.sangeet.ReportData;
+import com.cognitree.sangeet.BuyData;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
-import java.util.Map;
 
 class PurchaseEventCountReport extends FileBufferUtil implements Report {
     HashMap<Integer, Integer> itemCount;
@@ -18,19 +17,17 @@ class PurchaseEventCountReport extends FileBufferUtil implements Report {
     }
 
     @Override
-    public void aggregate(ReportData reportData) {
+    public void aggregate(BuyData buyData) {
         count++;
-        itemCount.put(reportData.getItemId(), itemCount.getOrDefault(reportData.getItemId(), 0) + 1);
+        itemCount.put(buyData.getItemId(), itemCount.getOrDefault(buyData.getItemId(), 0) + 1);
     }
 
     @Override
     public void generate() {
-        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count);
+        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 12);
 
-        for (Map.Entry<Integer, Integer> itemCountEntry: itemCount.entrySet()) {
-            byte[] buffer = (itemCountEntry.getKey() + " " + itemCountEntry.getValue()).getBytes();
-            byteBuffer.put(buffer);
-            byteBuffer.put("\n".getBytes());
-        }
+        itemCount.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));
+
+        FileBufferUtil.closeFile();
     }
 }
