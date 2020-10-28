@@ -12,7 +12,7 @@ public class BuyData {
 
     public BuyData(String[] data) {
         this.sessionId = Integer.parseInt(data[0]);
-        /*Time Taking */this.timestamp = Timestamp.valueOf(data[1].replace("T", " ").replace("Z", ""));
+        this.timestamp = Timestamp.valueOf(data[1].replace("T", " ").replace("Z", ""));
         this.itemId = Integer.valueOf(data[2]);
         this.price = Integer.valueOf(data[3]);
         this.quantity = Integer.valueOf(data[4]);

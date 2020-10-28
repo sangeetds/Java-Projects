@@ -15,7 +15,7 @@ public class FileBufferUtil {
             file = new RandomAccessFile(fileName, "rw").getChannel();
             byteBuffer = file.map(FileChannel.MapMode.READ_WRITE, 0, size);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("File" + fileName + "not writable or corrupt.");
         }
 
         return byteBuffer;
@@ -25,7 +25,7 @@ public class FileBufferUtil {
         try {
             file.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Problems with the file channel");
         }
     }
 }
