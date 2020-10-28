@@ -6,7 +6,6 @@ import com.cognitree.sangeet.reports.ReportsProvider;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 
 public class AnalyzeData {
     ReportsProvider reportsProvider;
@@ -14,7 +13,7 @@ public class AnalyzeData {
 
     public AnalyzeData(BufferedReader fileScanner) throws IOException {
         this.reportsProvider = ReportsProvider.getReportsProvider();
-        this.reports = reportsProvider.getReports();
+        this.reports = reportsProvider.getAggregator();
 
         String line;
         while ((line = fileScanner.readLine()) != null) {
@@ -22,19 +21,19 @@ public class AnalyzeData {
             ReportData currentData = new ReportData(line.split(","));
             aggregateData(currentData);
         }
+
         fileScanner.close();
     }
 
-    public void generateReports() {
+    public void generateAllReports() {
         for (Report report: this.reports) {
-            report.generateReport();
+            report.generate();
         }
     }
 
     private void aggregateData(ReportData currentData) {
-        for (Report report: this.reports) {
+        for (Report report : this.reports) {
             report.aggregate(currentData);
         }
     }
-
 }

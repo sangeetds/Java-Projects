@@ -2,13 +2,11 @@ package com.cognitree.sangeet.reports;
 
 import com.cognitree.sangeet.ReportData;
 
-import java.io.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Map;
 
-class PurchaseEventCountReport implements Report {
+class PurchaseEventCountReport extends FileBufferUtil implements Report {
     HashMap<Integer, Integer> itemCount;
     String fileName;
     int count;
@@ -26,27 +24,13 @@ class PurchaseEventCountReport implements Report {
     }
 
     @Override
-    public void generateReport() {
-        FileChannel file;
-        ByteBuffer byteBuffer;
-
-        try {
-            file = new RandomAccessFile(fileName, "rw").getChannel();
-            byteBuffer = file.map(FileChannel.MapMode.READ_WRITE, 0, count * 100);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
+    public void generate() {
+        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count);
 
         for (Map.Entry<Integer, Integer> itemCountEntry: itemCount.entrySet()) {
             byte[] buffer = (itemCountEntry.getKey() + " " + itemCountEntry.getValue()).getBytes();
             byteBuffer.put(buffer);
             byteBuffer.put("\n".getBytes());
         }
-    }
-
-    @Override
-    public void openReport() {
-
     }
 }

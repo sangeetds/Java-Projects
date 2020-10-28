@@ -1,15 +1,12 @@
 package com.cognitree.sangeet.reports;
 
-import com.cognitree.sangeet.ReportData;
-
-import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
 public class ReportsProvider {
 
     private static ReportsProvider reportsProvider = null;
-    private final List<Report> reports; // Is it necessary to return back?
+    private final List<Report> reports;
 
     private ReportsProvider() {
         this.reports = Arrays.asList(new AverageQuantityReport(), new PurchaseEventCountReport(), new DistinctSessionReport());
@@ -23,7 +20,7 @@ public class ReportsProvider {
         return reportsProvider;
     }
 
-    public List<Report> getReports() {
+    public List<Report> getAggregator() {
         return reports;
     }
 }

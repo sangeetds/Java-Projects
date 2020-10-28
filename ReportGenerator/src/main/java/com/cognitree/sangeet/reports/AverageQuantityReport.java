@@ -2,12 +2,10 @@ package com.cognitree.sangeet.reports;
 
 import com.cognitree.sangeet.ReportData;
 
-import java.io.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.*;
 
-class AverageQuantityReport implements Report {
+class AverageQuantityReport extends FileBufferUtil implements Report {
     HashMap<Integer, List<Integer>> averageQuantity;
     String fileName;
     int count;
@@ -26,28 +24,14 @@ class AverageQuantityReport implements Report {
     }
 
     @Override
-    public void generateReport() {
-        FileChannel file;
-        ByteBuffer byteBuffer;
+    public void generate() {
+        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count);
 
-        try {
-            file = new RandomAccessFile(fileName, "rw").getChannel();
-            byteBuffer = file.map(FileChannel.MapMode.READ_WRITE, 0, count * 100);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        for (Map.Entry<Integer, List<Integer>> itemCountEntry: averageQuantity.entrySet()) {
+        for (Map.Entry<Integer, List<Integer>> itemCountEntry : averageQuantity.entrySet()) {
             Double avgQuantity = new HashSet<>(itemCountEntry.getValue()).size() / (double) itemCountEntry.getValue().size();
             byte[] buffer = (itemCountEntry.getKey() + " " + avgQuantity).getBytes();
             byteBuffer.put(buffer);
             byteBuffer.put("\n".getBytes());
         }
-    }
-
-    @Override
-    public void openReport() {
-
     }
 }
