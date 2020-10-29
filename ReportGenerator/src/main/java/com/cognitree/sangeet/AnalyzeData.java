@@ -12,35 +12,43 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AnalyzeData {
-    ReportsProvider reportsProvider;
-    List<Report> reports;
 
     public AnalyzeData(BufferedReader fileScanner) throws IOException {
-        this.reportsProvider = ReportsProvider.getReportsProvider();
-        this.reports = reportsProvider.getReports();
-        List<BuyData> buyData = new ArrayList<>();
+        List<Report> reports = ReportsProvider.getReportsProvider().getReports();
+        List<String[]> parsedData = new ArrayList<>();
         int lines = 0;
 
         String tempLine;
         while ((tempLine = fileScanner.readLine()) != null) {
             String[] buyInfo = tempLine.split(",");
 
-            if (!validateData(buyInfo)) {
-                System.out.println("The current data:" + tempLine + "is invalid. Ignoring this data");
-            }
-            BuyData currentData = new BuyData(buyInfo);
-
-            if (lines > 100000) {
+            if (lines > 10000) {
                 lines = 0;
-                aggregateData(buyData);
-                buyData.clear();
+                List<BuyData> buyData = processData(parsedData);
+                aggregateData(buyData, reports);
+                parsedData.clear();
             }
 
-            buyData.add(currentData);
+            parsedData.add(buyInfo);
             lines++;
         }
 
         fileScanner.close();
+    }
+
+    private List<BuyData> processData(List<String[]> parsedData) {
+        List<BuyData> buyData = new ArrayList<>();
+
+        parsedData.forEach(data -> {
+            if (!validateData(data)) {
+                System.out.println("The current data:" + Arrays.toString(data) + "is invalid. Ignoring this data");
+            }
+            else {
+                buyData.add(new BuyData(data));
+            }
+        });
+
+        return buyData;
     }
 
     private boolean validateData(String[] line) {
@@ -64,15 +72,14 @@ public class AnalyzeData {
             }
         }
 
-
         return true;
     }
 
     public void generateAllReports() {
-        this.reports.forEach(Report::generate);
+        ReportsProvider.getReportsProvider().getReports().forEach(Report::generate);
     }
 
-    private void aggregateData(List<BuyData> currentData) {
-        this.reports.forEach(report -> report.aggregate(currentData));
+    private void aggregateData(List<BuyData> currentData, List<Report> reports) {
+        reports.forEach(report -> report.aggregate(currentData));
     }
 }
