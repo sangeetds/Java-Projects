@@ -3,7 +3,6 @@ package com.cognitree.sangeet.reports;
 import com.cognitree.sangeet.BuyData;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -13,13 +12,13 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 
 class DistinctSessionReport implements Report {
-    HashMap<Integer, Set<Integer>> sessionList;
-    String fileName;
-    int count;
+    private final HashMap<Integer, Set<Integer>> sessionList;
+    private final String fileName;
+    private int count;
 
     public DistinctSessionReport() {
         this.count = 0;
-        this.sessionList = new HashMap<Integer, java.util.Set<Integer>>();
+        this.sessionList = new HashMap<>();
         this.fileName = "SessionVsItemId.txt";
     }
 

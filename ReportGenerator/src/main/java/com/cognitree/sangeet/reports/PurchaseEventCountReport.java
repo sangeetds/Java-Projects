@@ -6,8 +6,6 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
@@ -19,7 +17,7 @@ class PurchaseEventCountReport extends FileBufferUtil implements Report {
 
     public PurchaseEventCountReport() {
         this.count = 0;
-        this.itemCount = new HashMap<Integer, Long>();
+        this.itemCount = new HashMap<>();
         this.fileName = "PurchaseReport.txt";
     }
 

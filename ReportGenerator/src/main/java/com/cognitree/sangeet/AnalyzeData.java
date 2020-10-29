@@ -8,20 +8,17 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AnalyzeData {
 
     public AnalyzeData(BufferedReader fileScanner) throws IOException {
         List<Report> reports = ReportsProvider.getReportsProvider().getReports();
-        List<String[]> parsedData = new ArrayList<>();
+        List<String> parsedData = new ArrayList<>();
         int lines = 0;
 
         String tempLine;
         while ((tempLine = fileScanner.readLine()) != null) {
-            String[] buyInfo = tempLine.split(",");
-
             if (lines > 10000) {
                 lines = 0;
                 List<BuyData> buyData = processData(parsedData);
@@ -29,26 +26,28 @@ public class AnalyzeData {
                 parsedData.clear();
             }
 
-            parsedData.add(buyInfo);
+            parsedData.add(tempLine);
             lines++;
         }
 
         fileScanner.close();
     }
 
-    private List<BuyData> processData(List<String[]> parsedData) {
-        List<BuyData> buyData = new ArrayList<>();
+    private List<BuyData> processData(List<String> parsedData) {
+        List<BuyData> buyDataList = new ArrayList<>();
 
         parsedData.forEach(data -> {
-            if (!validateData(data)) {
-                System.out.println("The current data:" + Arrays.toString(data) + "is invalid. Ignoring this data");
+            String[] buyData = data.split(",") ;
+
+            if (!validateData(buyData)) {
+                System.out.println("The current data:" + data + "is invalid. Ignoring this data");
             }
             else {
-                buyData.add(new BuyData(data));
+                buyDataList.add(new BuyData(buyData));
             }
         });
 
-        return buyData;
+        return buyDataList;
     }
 
     private boolean validateData(String[] line) {

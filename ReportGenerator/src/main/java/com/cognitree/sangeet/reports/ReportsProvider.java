@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ReportsProvider {
-
     private static ReportsProvider reportsProvider = null;
     private final List<Report> reports;
 

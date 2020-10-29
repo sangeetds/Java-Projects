@@ -3,12 +3,11 @@ package com.cognitree.sangeet;
 import java.sql.Timestamp;
 
 public class BuyData {
-    // Can be treat everyone of them as a String?
-    Integer sessionId;
-    Timestamp timestamp;
-    Integer itemId;
-    Integer price;
-    Integer quantity;
+    private final Integer sessionId;
+    private final Timestamp timestamp;
+    private final Integer itemId;
+    private final Integer price;
+    private final Integer quantity;
 
     public BuyData(String[] data) {
         this.sessionId = Integer.parseInt(data[0]);
