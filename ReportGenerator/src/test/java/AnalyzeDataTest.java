@@ -8,13 +8,16 @@ public class AnalyzeDataTest {
         BufferedReader fileScanner;
 
         try {
-            fileScanner = new BufferedReader(new InputStreamReader(new FileInputStream("dataset.txt"), StandardCharsets.UTF_8));
+            fileScanner = new BufferedReader(new InputStreamReader(new FileInputStream("yoochoose-buys.txt"), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             return;
         }
 
+        System.out.println(System.nanoTime() / 1_000_000);
         AnalyzeData analyzeData = new AnalyzeData(fileScanner);
+        System.out.println(System.nanoTime() / 1_000_000);
         analyzeData.generateAllReports();
+        System.out.println(System.nanoTime() / 1_000_000);
     }
 }

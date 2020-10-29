@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,15 +18,26 @@ public class AnalyzeData {
     public AnalyzeData(BufferedReader fileScanner) throws IOException {
         this.reportsProvider = ReportsProvider.getReportsProvider();
         this.reports = reportsProvider.getReports();
+        List<BuyData> buyData = new ArrayList<>();
+        int lines = 0;
 
-        String line;
-        while ((line = fileScanner.readLine()) != null) {
-            if (!validateData(line.split(","))) {
-                System.out.println("The current data:" + line + "is invalid. Ignoring this data");
+        String tempLine;
+        while ((tempLine = fileScanner.readLine()) != null) {
+            String[] buyInfo = tempLine.split(",");
+
+            if (!validateData(buyInfo)) {
+                System.out.println("The current data:" + tempLine + "is invalid. Ignoring this data");
+            }
+            BuyData currentData = new BuyData(buyInfo);
+
+            if (lines > 100000) {
+                lines = 0;
+                aggregateData(buyData);
+                buyData.clear();
             }
 
-            BuyData currentData = new BuyData(line.split(","));
-            aggregateData(currentData);
+            buyData.add(currentData);
+            lines++;
         }
 
         fileScanner.close();
@@ -60,7 +72,7 @@ public class AnalyzeData {
         this.reports.forEach(Report::generate);
     }
 
-    private void aggregateData(BuyData currentData) {
+    private void aggregateData(List<BuyData> currentData) {
         this.reports.forEach(report -> report.aggregate(currentData));
     }
 }

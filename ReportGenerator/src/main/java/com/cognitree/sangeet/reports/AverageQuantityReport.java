@@ -4,6 +4,10 @@ import com.cognitree.sangeet.BuyData;
 
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
 
 class AverageQuantityReport extends FileBufferUtil implements Report {
     HashMap<Integer, List<Integer>> averageQuantity;
@@ -17,15 +21,14 @@ class AverageQuantityReport extends FileBufferUtil implements Report {
     }
 
     @Override
-    public void aggregate(BuyData buyData) {
+    public void aggregate(List<BuyData> buyData) {
         count++;
-        averageQuantity.computeIfAbsent(buyData.getItemId(), k -> new ArrayList<>());
-        averageQuantity.get(buyData.getItemId()).add(buyData.getSessionId());
+        averageQuantity.putAll(buyData.stream().collect(groupingBy(BuyData::getItemId, mapping(BuyData::getSessionId, Collectors.toList()))));
     }
 
     @Override
     public void generate() {
-        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 14);
+        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
 
         averageQuantity.forEach((key, value) -> {
             Double avgQuantity = new HashSet<>(value).size() / (double) value.size();
