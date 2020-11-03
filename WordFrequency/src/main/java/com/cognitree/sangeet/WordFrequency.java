@@ -6,42 +6,64 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class WordFrequency {
-    List<String> hay;
+    final List<String> hay;
     HashMap<String, Long> hayMap;
+    long lines;
 
     public WordFrequency() {
-        this.hay = new ArrayList<>();
+        this.hay = Collections.synchronizedList(new ArrayList<>());
         this.hayMap = new HashMap<>();
+        this.lines = 0;
     }
 
-    public void storeLine(List<String> lines) {
-        hay.addAll(lines);
-    }
+    public void storeLine(String newLines) {
+        synchronized (hay) {
+            hay.add(newLines);
 
-    public void storeFrequency(List<String> lines) {
-        lines.forEach( line -> {
-            Map<String, Long> temp = Arrays.stream(line.split("\\s+")).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-            temp.forEach((key, value) -> hayMap.put(key, hayMap.getOrDefault(key, 0L) + value));
-        });
+            if (lines < (long) hay.size()) {
+                hay.notifyAll();
+            }
+        }
     }
 
     public long reportCaseInsensitiveWordCount(String needle) {
-        long frequency = 0;
+        synchronized (hay) {
+            long frequency = 0;
 
-        long l = 0L;
-
-        for (String currentLine: hay) {
-            for (String splitLine: currentLine.split("\\s+")) {
-                l++;
-                if (splitLine.equalsIgnoreCase(needle)) {
-                    frequency++;
+            if (lines >= hay.size()) {
+                try {
+                    System.out.println("No lines to process");
+                    hay.wait();
+                    System.out.println("Now processing");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
+
+            for (String currentLine : hay) {
+                lines++;
+
+                for (String splitLine : currentLine.split("\\s+")) {
+                    if (splitLine.equalsIgnoreCase(needle)) {
+                        frequency++;
+                    }
+                }
+
+                if (lines >= hay.size()) {
+                    try {
+                        System.out.println("No lines to process");
+                        hay.wait();
+                        System.out.println("Now processing");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            System.out.println("lines:" + lines);
+
+            return frequency;
         }
-
-        System.out.println("words:" + l);
-
-        return frequency;
     }
 
     public long reportCaseSensitiveWordCount(String needle) {
