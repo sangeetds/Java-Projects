@@ -25,9 +25,13 @@ public class WordFrequencyTest {
         System.out.println("Running threads " + System.nanoTime() / 1_000_000);
         t1.start();
 //        process(wordFrequency, fileScanner);
+//        wordFrequency.reportCaseInsensitiveWordCount("Lorem");
+//        process(wordFrequency, fileScanner);
 //        t1.join();
+//        Thread.sleep(1000);
         t2.start();
 //        t1.start();
+        System.out.println("Running threads " + System.nanoTime() / 1_000_000);
     }
 
     private static BufferedReader getBufferedReader() {
@@ -48,7 +52,6 @@ public class WordFrequencyTest {
 //        List<String> batch = new ArrayList<>();
         String line;
 
-        System.out.println(System.nanoTime());
         do {
 //            batchSize++;
             line = fileScanner.readLine();
