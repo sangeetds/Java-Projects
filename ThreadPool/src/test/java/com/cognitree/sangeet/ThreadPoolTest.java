@@ -9,17 +9,19 @@ public class ThreadPoolTest {
     public static void main(String[] args) {
         ThreadPool threadPool = new ThreadPool();
 
-        for (int i = 0; i < 100; i++) {
-            final int a = i;
-            threadPool.submit(() -> System.out.println("Hello " + a));
-        }
-//        Callable<String> one = () -> "hello one";
-//        Callable<String> two = () -> "Hello two";
-//        Runnable three = () -> System.out.println("Hello three");
-//        Runnable four = () -> System.out.println("Hello four");
-//
-//        threadPool.execute(three);
-//        threadPool.submit(four);
+//        for (int i = 0; i < 100; i++) {
+//            final int a = i;
+//            threadPool.submit(() -> System.out.println("Hello " + a));
+//        }
+        Callable<String> one = () -> "hello one";
+        Callable<String> two = () -> "Hello two";
+        Runnable three = () -> System.out.println("Hello three");
+        Runnable four = () -> System.out.println("Hello four");
+
+        threadPool.execute(three);
+        threadPool.submit(four);
+        threadPool.execute(one);
+        threadPool.execute(two);
 
 //        FutureTask<String> fOne = threadPool.execute(one);
 //        FutureTask<String> fTwo = threadPool.execute(two);
