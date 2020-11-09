@@ -5,8 +5,10 @@ import java.util.List;
 
 public class Producer {
     final List<Integer> producedGoods;
+    final String name;
 
-    public Producer(List<Integer> producedGoods) {
+    public Producer(List<Integer> producedGoods, String name) {
+        this.name = name;
         this.producedGoods = producedGoods;
     }
 
@@ -23,7 +25,7 @@ public class Producer {
                     }
                 }
 
-                System.out.println("Added: " + this.producedGoods.size());
+                System.out.println("Added: " + this.name + this.producedGoods.size());
                 this.producedGoods.add(this.producedGoods.size());
 
                 producedGoods.notify();

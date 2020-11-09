@@ -1,5 +1,4 @@
-import com.cognitree.sangeet.Consumer;
-import com.cognitree.sangeet.Producer;
+import com.cognitree.sangeet.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +7,22 @@ import java.util.stream.Stream;
 public class ProducerConsumerTest {
     public static void main(String[] args) throws InterruptedException {
         List<Integer> tempList = new ArrayList<>();
-        Producer p = new Producer(tempList);
-        Consumer c = new Consumer(tempList);
+        Producer p = new Producer(tempList, "p1");
+        Producer pTwo = new ProducerTwo(tempList, "p2");
+        Producer pThree = new ProducerThree(tempList, "p3");
+        Consumer c = new Consumer(tempList, "c1");
+        Consumer cTwo = new ConsumerTwo(tempList, "c2");
 
-        Thread t1 = new Thread(p::produce);
+        Thread t1 = new Thread(pTwo::produce);
+        Thread t3 = new Thread(pThree::produce);
+        Thread t4 = new Thread(p::produce);
         t1.start();
+        t3.start();
+        t4.start();
         Thread t2 = new Thread(c::consume);
+        Thread t5 = new Thread(cTwo::consume);
 
         t2.start();
+        t5.start();
     }
 }

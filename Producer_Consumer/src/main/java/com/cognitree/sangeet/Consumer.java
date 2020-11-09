@@ -4,8 +4,10 @@ import java.util.List;
 
 public class Consumer {
     final List<Integer> producedGoods;
+    final String name;
 
-    public Consumer(List<Integer> producedGoods) {
+    public Consumer(List<Integer> producedGoods, String name) {
+        this.name = name;
         this.producedGoods = producedGoods;
     }
 
@@ -21,7 +23,7 @@ public class Consumer {
                     }
                 }
 
-                System.out.println("Removed: " + " " + this.producedGoods.remove(0));
+                System.out.println("Removed: " + this.name + this.producedGoods.remove(0));
 
                 producedGoods.notify();
             }
