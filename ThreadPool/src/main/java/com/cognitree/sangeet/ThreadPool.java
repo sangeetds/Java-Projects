@@ -1,12 +1,9 @@
 package com.cognitree.sangeet;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.*;
 
 public class ThreadPool {
-    private final int maxThread;
-    private final List<Thread> threads;
+    private final Thread[] threads;
     private final BlockingQueue queue;
 
     public ThreadPool() {
@@ -14,46 +11,69 @@ public class ThreadPool {
     }
 
     public ThreadPool(int maxThread) {
-        this.maxThread = maxThread;
         this.queue = new LinkedBlockingQueue();
-        this.threads = new ArrayList<>();
+        this.threads = new Thread[maxThread];
 
         for (int i = 0; i < maxThread; i++) {
             Thread newThread = new Thread(() -> {
                 while (true) {
-                    synchronized (queue) {
-                        if (queue.isEmpty()) {
+                    synchronized (this.queue){
+                        if (this.queue.isEmpty()) {
                             try {
-//                                System.out.println("ThreadPool is waiting for the task");
-                                queue.wait();
+                                this.queue.wait();
                             } catch (InterruptedException e) {
-                                System.out.println("Thread interrupted");
+                                e.printStackTrace();
                             }
                         }
                     }
+
+                    Object task = this.queue.remove();
+                    Runnable runnable = null;
+                    Callable callable = null;
+
+                    try {
+                        runnable = (Runnable) task;
+                    }
+                    catch (ClassCastException ignored) {}
+
+                    if (runnable == null) {
+                        try {
+                            callable = (Callable) task;
+                        } catch (ClassCastException ignored) {}
+
+                        new FutureTask(callable).run();
+                    }
+                    else runnable.run();
                 }
             });
-            this.threads.add(newThread);
+
+            this.threads[i] = newThread;
             newThread.start();
         }
 
-//        start();
     }
 
-//    private void start() {
-//        Runnable task;
-//
-//
-//    }
+    public <T> FutureTask<T> execute(Callable<T> task) {
+        synchronized (this.queue) {
+            this.queue.add(task);
+            this.queue.notify();
+        }
+        return new FutureTask<>(task);
+    }
 
-//    public <T> Future<T> submit(Callable<T> task) {
-//        return null;
-//    }
+    public FutureTask<?> execute(Runnable task) {
+        synchronized (this.queue) {
+            this.queue.add(task);
+            this.queue.notify();
+        }
+
+        return new FutureTask<Void>(task, null);
+    }
 
     public void submit(Runnable task) {
-        synchronized (queue) {
-            queue.add(task);
-            queue.notifyAll();
+        synchronized (this.queue) {
+            this.queue.add(task);
+            this.queue.notify();
         }
     }
 }
