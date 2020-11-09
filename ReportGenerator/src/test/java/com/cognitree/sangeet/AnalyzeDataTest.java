@@ -1,3 +1,5 @@
+package com.cognitree.sangeet;
+
 import com.cognitree.sangeet.AnalyzeData;
 
 import java.io.*;
@@ -14,10 +16,10 @@ public class AnalyzeDataTest {
             return;
         }
 
-        System.out.println(System.nanoTime() / 1_000_000);
+//        System.out.println(System.nanoTime() / 1_000_000);
         AnalyzeData analyzeData = new AnalyzeData(fileScanner);
-        System.out.println(System.nanoTime() / 1_000_000);
+//        System.out.println(System.nanoTime() / 1_000_000);
         analyzeData.generateAllReports();
-        System.out.println(System.nanoTime() / 1_000_000);
+//        System.out.println(System.nanoTime() / 1_000_000);
     }
 }
