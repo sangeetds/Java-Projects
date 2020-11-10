@@ -1,80 +1,85 @@
 package com.cognitree.sangeet;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
 public class ThreadPool {
-    private final Thread[] threads;
-    private final BlockingQueue queue;
+    private final List<Thread> threads;
+    private final BlockingQueue<Runnable> runnableQueue;
+    private final BlockingQueue<RunnableFuture<?>> callableQueue;
 
     public ThreadPool() {
-        this(10);
+        this(4);
     }
 
     public ThreadPool(int maxThread) {
-        this.queue = new LinkedBlockingQueue();
-        this.threads = new Thread[maxThread];
+        this.callableQueue = new LinkedBlockingQueue<>();
+        this.runnableQueue = new LinkedBlockingQueue<>();
+        this.threads = new ArrayList<>();
 
         for (int i = 0; i < maxThread; i++) {
             Thread newThread = new Thread(() -> {
                 while (true) {
-                    synchronized (this.queue){
-                        if (this.queue.isEmpty()) {
+                    synchronized (this.runnableQueue){
+                        if (this.runnableQueue.isEmpty() && this.callableQueue.isEmpty()) {
                             try {
-                                this.queue.wait();
+                                this.runnableQueue.wait();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
                     }
 
-                    Object task = this.queue.remove();
-                    Runnable runnable = null;
-                    Callable callable = null;
-
-                    try {
-                        runnable = (Runnable) task;
-                    }
-                    catch (ClassCastException ignored) {}
-
-                    if (runnable == null) {
+                    if (runnableQueue.isEmpty()) {
                         try {
-                            callable = (Callable) task;
-                        } catch (ClassCastException ignored) {}
-
-                        new FutureTask(callable).run();
+                            RunnableFuture<?> future = this.callableQueue.take();
+                            future.run();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-
-                    else runnable.run();
+                    else {
+                        try {
+                            Runnable runnable = this.runnableQueue.take();
+                            runnable.run();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
 
-            this.threads[i] = newThread;
+            this.threads.add(newThread);
             newThread.start();
         }
 
     }
 
-    public <T> FutureTask<T> execute(Callable<T> task) {
-        synchronized (this.queue) {
-            this.queue.add(task);
-            this.queue.notify();
+    public <T> Future<T> execute(Callable<T> task) {
+        synchronized (this.callableQueue) {
+            RunnableFuture<T> newTask = new FutureTask<>(task);
+            this.callableQueue.add(newTask);
+            this.callableQueue.notifyAll();
+
+            return newTask;
         }
-        return new FutureTask<>(task);
     }
 
-    public FutureTask<?> execute(Runnable task) {
-        synchronized (this.queue) {
-            this.queue.add(task);
-            this.queue.notify();
-        }
+    public Future<?> execute(Runnable task) {
+        synchronized (this.runnableQueue) {
+            RunnableFuture<Void> newTask = new FutureTask<Void>(task, null);
+            this.runnableQueue.add(newTask);
+            this.runnableQueue.notifyAll();
 
-        return new FutureTask<Void>(task, null);
+            return newTask;
+        }
     }
 
     public void submit(Runnable task) {
-        synchronized (this.queue) {
-            this.queue.add(task);
-            this.queue.notify();
+        synchronized (this.runnableQueue) {
+            this.runnableQueue.add(task);
+            this.runnableQueue.notifyAll();
         }
     }
 }

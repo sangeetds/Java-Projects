@@ -13,15 +13,29 @@ public class ThreadPoolTest {
 //            final int a = i;
 //            threadPool.submit(() -> System.out.println("Hello " + a));
 //        }
-        Callable<String> one = () -> "hello one";
-        Callable<String> two = () -> "Hello two";
+        Callable<String> one = () -> {
+            System.out.println("Hello One");
+            return "true";
+        };
+        Callable<String> two = () -> {
+            System.out.println("Hello Two");
+            return "true";
+        };
         Runnable three = () -> System.out.println("Hello three");
         Runnable four = () -> System.out.println("Hello four");
 
         threadPool.execute(three);
         threadPool.submit(four);
-        threadPool.execute(one);
-        threadPool.execute(two);
+        Future<String> s = threadPool.execute(one);
+        Future<String> sOne = threadPool.execute(two);
+
+        try {
+            System.out.println(s.get());
+            System.out.println(sOne.get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
 
 //        FutureTask<String> fOne = threadPool.execute(one);
 //        FutureTask<String> fTwo = threadPool.execute(two);
