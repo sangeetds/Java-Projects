@@ -1,12 +1,13 @@
 package com.cognitree.sangeet;
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 public class Consumer {
-    final List<Integer> producedGoods;
+    final BlockingQueue<Integer> producedGoods;
     final String name;
 
-    public Consumer(List<Integer> producedGoods, String name) {
+    public Consumer(BlockingQueue<Integer> producedGoods, String name) {
         this.name = name;
         this.producedGoods = producedGoods;
     }
@@ -14,18 +15,30 @@ public class Consumer {
     public void consume() {
         while (true) {
             synchronized (producedGoods) {
-                if (producedGoods.size() == 0) {
+                if (producedGoods.isEmpty()) {
                     System.out.println("No goods right now. Wait");
                     try {
                         producedGoods.wait();
+
                     } catch (InterruptedException e) {
                         System.out.println("Production interrupted");
                     }
                 }
 
-                System.out.println("Removed: " + this.name + this.producedGoods.remove(0));
+                if (producedGoods.size() > 0) {
+                    try {
+                        System.out.println("Removed: " + this.name + " " + this.producedGoods.take());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 producedGoods.notify();
+                try {
+                    producedGoods.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

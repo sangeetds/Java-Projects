@@ -2,12 +2,14 @@ package com.cognitree.sangeet;
 
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class Producer {
-    final List<Integer> producedGoods;
+    final BlockingQueue<Integer> producedGoods;
     final String name;
 
-    public Producer(List<Integer> producedGoods, String name) {
+    public Producer(BlockingQueue<Integer> producedGoods, String name) {
         this.name = name;
         this.producedGoods = producedGoods;
     }
@@ -15,7 +17,7 @@ public class Producer {
     public void produce() {
         while (true) {
             synchronized (producedGoods) {
-                while (producedGoods.size() >= 10) {
+                if (producedGoods.size() >= 10) {
                     try {
                         System.out.println("Too many goods in the factory. Current Size: " + producedGoods.size());
                         producedGoods.wait();
@@ -25,10 +27,21 @@ public class Producer {
                     }
                 }
 
-                System.out.println("Added: " + this.name + this.producedGoods.size());
-                this.producedGoods.add(this.producedGoods.size());
+                if (producedGoods.size() < 10) {
+                    System.out.println("Added: " + this.name + " " + this.producedGoods.size());
+                    try {
+                        this.producedGoods.put(this.producedGoods.size());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 producedGoods.notify();
+                try {
+                    producedGoods.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

@@ -2,16 +2,17 @@ import com.cognitree.sangeet.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.stream.Stream;
 
 public class ProducerConsumerTest {
     public static void main(String[] args) throws InterruptedException {
-        List<Integer> tempList = new ArrayList<>();
+        BlockingQueue<Integer> tempList = new ArrayBlockingQueue<>(10);
         Producer p = new Producer(tempList, "p1");
-        Producer pTwo = new ProducerTwo(tempList, "p2");
-        Producer pThree = new ProducerThree(tempList, "p3");
+        Producer pTwo = new Producer(tempList, "p2");
+        Producer pThree = new Producer(tempList, "p3");
         Consumer c = new Consumer(tempList, "c1");
-        Consumer cTwo = new ConsumerTwo(tempList, "c2");
+        Consumer cTwo = new Consumer(tempList, "c2");
 
         Thread t1 = new Thread(pTwo::produce);
         Thread t3 = new Thread(pThree::produce);
