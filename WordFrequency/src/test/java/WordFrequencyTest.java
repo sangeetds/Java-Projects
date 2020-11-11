@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class WordFrequencyTest {
-
     public static void main(String[] args) throws Exception {
         BufferedReader fileScanner = getBufferedReader();
         if (fileScanner == null) return;

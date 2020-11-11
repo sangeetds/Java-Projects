@@ -49,9 +49,9 @@ public class WordFrequencyThread extends WordFrequency {
                 if (this.lines >= 170939) return null;
 
                 try {
-                    System.out.println("wait " + this.lines + " " + this.totalLines);
+//                    System.out.println("wait " + this.lines + " " + this.totalLines);
                     this.hay.wait();
-                    System.out.println("no wait " + this.lines);
+//                    System.out.println("no wait " + this.lines);
                 }
                 catch (InterruptedException e) {
                     System.out.println("Thread interrupted");
