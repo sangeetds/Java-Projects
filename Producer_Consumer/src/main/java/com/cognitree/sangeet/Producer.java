@@ -2,47 +2,47 @@ package com.cognitree.sangeet;
 
 
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.StampedLock;
 
 public class Producer {
-    final BlockingQueue<Integer> producedGoods;
+    final List<Integer> producedGoods;
     final String name;
+    final StampedLock producerLock;
 
-    public Producer(BlockingQueue<Integer> producedGoods, String name) {
+    public Producer(List<Integer> producedGoods, String name) {
         this.name = name;
         this.producedGoods = producedGoods;
+        this.producerLock = new StampedLock();
     }
 
     public void produce() {
         while (true) {
-            synchronized (producedGoods) {
-                if (producedGoods.size() >= 10) {
-                    try {
-                        System.out.println("Too many goods in the factory. Current Size: " + producedGoods.size());
-                        producedGoods.wait();
-                        System.out.println("Now producing");
-                    } catch (InterruptedException e) {
-                        System.out.println("Thread interrupted");
-                    }
-                }
-
-                if (producedGoods.size() < 10) {
-                    System.out.println("Added: " + this.name + " " + this.producedGoods.size());
-                    try {
-                        this.producedGoods.put(this.producedGoods.size());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                producedGoods.notify();
+//            synchronized (producedGoods) {
+            long stamp = producerLock.writeLock();
+            if (getSize() <= 10) {
                 try {
-                    producedGoods.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+//                    if (producedGoods.size() >= 10) {
+//                        System.out.println("Too many goods in the factory. Current Size: " + producedGoods.size());
+//                    producedGoods.wait();
+//                        System.out.println("Now producing");
+//                    }
+                    System.out.println("Added: " + this.name + " " + getSize());
+                    this.producedGoods.add(getSize());
+
+//                producedGoods.notifyAll();
+                } finally {
+                    producerLock.unlockWrite(stamp);
                 }
             }
         }
+
+
     }
+
+    private int getSize() {
+        synchronized (this.producedGoods) {
+            return this.producedGoods.size();
+        }
+    }
+//        }
 }
