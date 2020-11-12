@@ -3,7 +3,7 @@ package com.cognitree.sangeet;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-public class BuyData {
+final public class BuyData {
     private final Integer sessionId;
     private final Timestamp timestamp;
     private final Integer itemId;
