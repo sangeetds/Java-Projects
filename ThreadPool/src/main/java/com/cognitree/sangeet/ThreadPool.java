@@ -7,16 +7,20 @@ import java.util.concurrent.*;
 public class ThreadPool {
     private final List<Thread> threads;
     private final BlockingQueue<Object> runnableQueue;
+    private final int MaxThreads = 32;
 
-    public ThreadPool() {
-        this(4);
+    public ThreadPool() throws Exception {
+        this(8);
     }
 
-    public ThreadPool(int maxThread) {
+    public ThreadPool(int threadsRequested) throws Exception {
+        if (threadsRequested > MaxThreads) {
+            throw requestExceededException();
+        }
         this.runnableQueue = new LinkedBlockingQueue<>();
         this.threads = new ArrayList<>();
 
-        for (int i = 0; i < maxThread; i++) {
+        for (int index = 0; index < threadsRequested; index++) {
             Thread newThread = new Thread(() -> {
                 while (true) {
                     synchronized (this.runnableQueue) {
@@ -55,6 +59,10 @@ public class ThreadPool {
             newThread.start();
         }
 
+    }
+
+    private Exception requestExceededException() {
+        return new Exception("Threads requested can not be more than " + MaxThreads);
     }
 
     public <T> Future<T> execute(Callable<T> task) throws NumberFormatException {

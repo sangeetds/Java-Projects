@@ -7,13 +7,13 @@ import java.util.concurrent.*;
 
 public class ThreadPoolTest {
     public static void main(String[] args) {
-        ThreadPool threadPool = new ThreadPool();
-        ExecutorService ex = Executors.newCachedThreadPool();
+        ThreadPool threadPool = null;
+        try {
+            threadPool = new ThreadPool();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-//        for (int i = 0; i < 100; i++) {
-//            final int a = i;
-//            threadPool.submit(() -> System.out.println("Hello " + a));
-//        }
         Callable<String> one = () -> {
             System.out.println("Hello One 1");
             return "true 2";
@@ -36,15 +36,5 @@ public class ThreadPoolTest {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
-
-//        FutureTask<String> fOne = threadPool.execute(one);
-//        FutureTask<String> fTwo = threadPool.execute(two);
-//        try {
-//            fOne.get(100, TimeUnit.MILLISECONDS);
-//            fTwo.get(100, TimeUnit.MILLISECONDS);
-//        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//            e.printStackTrace();
-//        }
     }
 }
