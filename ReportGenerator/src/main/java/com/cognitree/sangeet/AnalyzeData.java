@@ -12,25 +12,42 @@ import java.util.List;
 
 public class AnalyzeData {
 
-    public AnalyzeData(BufferedReader fileScanner) throws IOException {
+    public AnalyzeData(BufferedReader fileScanner) {
         List<Report> reports = ReportsProvider.getReportsProvider().getReports();
         List<String> parsedData = new ArrayList<>();
+        int batches = 0;
         int lines = 0;
 
         String tempLine;
-        while ((tempLine = fileScanner.readLine()) != null) {
-            if (lines > 10000) {
-                lines = 0;
-                List<BuyData> buyData = processData(parsedData);
-                aggregateData(buyData, reports);
-                parsedData.clear();
+        try {
+            while ((tempLine = fileScanner.readLine()) != null) {
+                if (lines > 10000) {
+                    batches++;
+                    lines = 0;
+                    List<BuyData> buyData = processData(parsedData);
+                    aggregateData(buyData, reports);
+                    parsedData.clear();
+                }
+
+                parsedData.add(tempLine);
+                lines++;
             }
 
-            parsedData.add(tempLine);
-            lines++;
         }
+        catch (IOException e) {
+            System.out.println("Problem with data point at: " + batches * lines);
+        }
+        finally {
+            List<BuyData> buyData = processData(parsedData);
+            aggregateData(buyData, reports);
+            parsedData.clear();
 
-        fileScanner.close();
+            try {
+                fileScanner.close();
+            } catch (IOException e) {
+                System.out.println("Problems at closing the file");
+            }
+        }
     }
 
     private List<BuyData> processData(List<String> parsedData) {
@@ -50,11 +67,11 @@ public class AnalyzeData {
         return buyDataList;
     }
 
-    private boolean validateData(String[] line) {
-        for (int i = 0; i < line.length; i++) {
-            String data = line[i];
+    private boolean validateData(String[] lines) {
+        for (int buyDataIndex = 0; buyDataIndex < lines.length; buyDataIndex++) {
+            String data = lines[buyDataIndex];
 
-            if (i != 1) {
+            if (buyDataIndex != 1) {
                 try {
                     Integer.parseInt(data);
                 } catch (NumberFormatException e) {
@@ -75,7 +92,7 @@ public class AnalyzeData {
     }
 
     public void generateAllReports() {
-        ReportsProvider.getReportsProvider().getReports().forEach(Report::generate);
+        ReportsProvider.getReportsProvider().getReports().forEach(Report::saveToOutput);
     }
 
     private void aggregateData(List<BuyData> currentData, List<Report> reports) {

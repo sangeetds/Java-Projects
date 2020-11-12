@@ -11,9 +11,9 @@ import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
 class PurchaseEventCountReport extends FileBufferUtil implements Report {
-    HashMap<Integer, Long> itemCount;
-    String fileName;
-    int count;
+    private final HashMap<Integer, Long> itemCount;
+    private final String fileName;
+    private int count;
 
     public PurchaseEventCountReport() {
         this.count = 0;
@@ -29,7 +29,7 @@ class PurchaseEventCountReport extends FileBufferUtil implements Report {
     }
 
     @Override
-    public void generate() {
+    public void saveToOutput() {
         ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 14000);
 
         itemCount.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));

@@ -10,9 +10,9 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.mapping;
 
 class AverageQuantityReport extends FileBufferUtil implements Report {
-    HashMap<Integer, List<Integer>> averageQuantity;
-    String fileName;
-    int count;
+    private final HashMap<Integer, List<Integer>> averageQuantity;
+    private final String fileName;
+    private int count;
 
     public AverageQuantityReport() {
         this.count = 0;
@@ -27,7 +27,7 @@ class AverageQuantityReport extends FileBufferUtil implements Report {
     }
 
     @Override
-    public void generate() {
+    public void saveToOutput() {
         ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
 
         averageQuantity.forEach((key, value) -> {

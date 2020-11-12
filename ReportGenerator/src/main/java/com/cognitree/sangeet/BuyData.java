@@ -1,6 +1,7 @@
 package com.cognitree.sangeet;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 public class BuyData {
     private final Integer sessionId;
@@ -35,5 +36,22 @@ public class BuyData {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BuyData buyData = (BuyData) o;
+        return getSessionId().equals(buyData.getSessionId()) &&
+                getTimestamp().equals(buyData.getTimestamp()) &&
+                getItemId().equals(buyData.getItemId()) &&
+                getPrice().equals(buyData.getPrice()) &&
+                getQuantity().equals(buyData.getQuantity());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getSessionId(), getTimestamp(), getItemId(), getPrice(), getQuantity());
     }
 }

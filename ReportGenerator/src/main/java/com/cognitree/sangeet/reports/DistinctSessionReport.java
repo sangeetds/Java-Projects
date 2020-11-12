@@ -29,7 +29,7 @@ class DistinctSessionReport implements Report {
     }
 
     @Override
-    public void generate() {
+    public void saveToOutput() {
         ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
 
         sessionList.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));

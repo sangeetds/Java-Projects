@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class FileBufferUtil {
-    static FileChannel file;
+    static public FileChannel file;
 
     static public ByteBuffer getByteBuffer(String fileName, int size) {
         ByteBuffer byteBuffer = null;
