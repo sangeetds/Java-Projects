@@ -15,30 +15,17 @@ public class Producer {
 
     public void produce() {
         while (true) {
-            if (getSize() <= 10) {
-                long stamp = producerLock.writeLock();
-                try {
-                    System.out.println("Added: " + this.name + " " + getSize());
-                    this.producedGoods.add(getSize());
-                } finally {
-                    producerLock.unlockWrite(stamp);
+            long stamp = producerLock.writeLock();
+            try {
+                synchronized (this.producedGoods) {
+                    if (producedGoods.size() <= 10) {
+                        System.out.println("Added: " + this.name + " " + producedGoods.size());
+                        this.producedGoods.add(producedGoods.size());
+                    }
                 }
+            } finally {
+                producerLock.unlockWrite(stamp);
             }
-        }
-    }
-
-    private int getSize() {
-        synchronized (this.producedGoods) {
-            while (this.producedGoods.size() >= 10) {
-                try {
-                    this.producedGoods.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            this.producedGoods.notifyAll();
-            return this.producedGoods.size();
         }
     }
 }
