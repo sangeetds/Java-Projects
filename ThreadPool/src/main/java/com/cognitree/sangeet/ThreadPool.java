@@ -6,23 +6,21 @@ import java.util.concurrent.*;
 
 public class ThreadPool {
     private final List<Thread> threads;
-    private final BlockingQueue<Runnable> runnableQueue;
-    private final BlockingQueue<RunnableFuture<?>> callableQueue;
+    private final BlockingQueue<Object> runnableQueue;
 
     public ThreadPool() {
         this(4);
     }
 
     public ThreadPool(int maxThread) {
-        this.callableQueue = new LinkedBlockingQueue<>();
         this.runnableQueue = new LinkedBlockingQueue<>();
         this.threads = new ArrayList<>();
 
         for (int i = 0; i < maxThread; i++) {
             Thread newThread = new Thread(() -> {
                 while (true) {
-                    synchronized (this.runnableQueue){
-                        if (this.runnableQueue.isEmpty() && this.callableQueue.isEmpty()) {
+                    synchronized (this.runnableQueue) {
+                        while (this.runnableQueue.isEmpty()) {
                             try {
                                 this.runnableQueue.wait();
                             } catch (InterruptedException e) {
@@ -31,21 +29,24 @@ public class ThreadPool {
                         }
                     }
 
-                    if (runnableQueue.isEmpty()) {
-                        try {
-                            RunnableFuture<?> future = this.callableQueue.take();
-                            future.run();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                    Object task = null;
+                    try {
+                        task = this.runnableQueue.take();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        try {
-                            Runnable runnable = this.runnableQueue.take();
-                            runnable.run();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    if (task == null) continue;
+
+                    try {
+                        RunnableFuture<?> future = (RunnableFuture<?>) task;
+                        future.run();
+                    } catch (ClassCastException ignored) {
+                    }
+
+                    try {
+                        Runnable runnable = (Runnable) task;
+                        runnable.run();
+                    } catch (ClassCastException ignored) {
                     }
                 }
             });
@@ -56,19 +57,11 @@ public class ThreadPool {
 
     }
 
-    public <T> Future<T> execute(Callable<T> task) {
-        synchronized (this.callableQueue) {
-            RunnableFuture<T> newTask = new FutureTask<>(task);
-            this.callableQueue.add(newTask);
-            this.callableQueue.notifyAll();
+    public <T> Future<T> execute(Callable<T> task) throws NumberFormatException {
+        if (task == null) throw new NullPointerException();
 
-            return newTask;
-        }
-    }
-
-    public Future<?> execute(Runnable task) {
         synchronized (this.runnableQueue) {
-            RunnableFuture<Void> newTask = new FutureTask<Void>(task, null);
+            RunnableFuture<T> newTask = new FutureTask<>(task);
             this.runnableQueue.add(newTask);
             this.runnableQueue.notifyAll();
 
@@ -76,7 +69,21 @@ public class ThreadPool {
         }
     }
 
-    public void submit(Runnable task) {
+    public Future<?> execute(Runnable task) throws NumberFormatException {
+        if (task == null) throw new NullPointerException();
+
+        synchronized (this.runnableQueue) {
+            RunnableFuture<Void> newTask = new FutureTask<>(task, null);
+            this.runnableQueue.add(newTask);
+            this.runnableQueue.notifyAll();
+
+            return newTask;
+        }
+    }
+
+    public void submit(Runnable task) throws NumberFormatException {
+        if (task == null) throw new NullPointerException();
+
         synchronized (this.runnableQueue) {
             this.runnableQueue.add(task);
             this.runnableQueue.notifyAll();

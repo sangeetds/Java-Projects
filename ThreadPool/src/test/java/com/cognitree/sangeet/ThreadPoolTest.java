@@ -9,28 +9,21 @@ public class ThreadPoolTest {
     public static void main(String[] args) {
         ThreadPool threadPool = new ThreadPool();
         ExecutorService ex = Executors.newCachedThreadPool();
-        
-        ex.submit(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
 
 //        for (int i = 0; i < 100; i++) {
 //            final int a = i;
 //            threadPool.submit(() -> System.out.println("Hello " + a));
 //        }
         Callable<String> one = () -> {
-            System.out.println("Hello One");
-            return "true";
+            System.out.println("Hello One 1");
+            return "true 2";
         };
         Callable<String> two = () -> {
-            System.out.println("Hello Two");
-            return "true";
+            System.out.println("Hello Two 3");
+            return "true 4";
         };
-        Runnable three = () -> System.out.println("Hello three");
-        Runnable four = () -> System.out.println("Hello four");
+        Runnable three = () -> System.out.println("Hello three 5");
+        Runnable four = () -> System.out.println("Hello four 6");
 
         threadPool.execute(three);
         threadPool.submit(four);
