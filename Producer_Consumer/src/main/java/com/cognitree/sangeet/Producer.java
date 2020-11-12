@@ -1,48 +1,44 @@
 package com.cognitree.sangeet;
 
-
 import java.util.List;
-import java.util.concurrent.locks.StampedLock;
+
+import static com.cognitree.sangeet.Locks.producerLock;
 
 public class Producer {
     final List<Integer> producedGoods;
     final String name;
-    final StampedLock producerLock;
 
     public Producer(List<Integer> producedGoods, String name) {
         this.name = name;
         this.producedGoods = producedGoods;
-        this.producerLock = new StampedLock();
     }
 
     public void produce() {
         while (true) {
-//            synchronized (producedGoods) {
-            long stamp = producerLock.writeLock();
             if (getSize() <= 10) {
+                long stamp = producerLock.writeLock();
                 try {
-//                    if (producedGoods.size() >= 10) {
-//                        System.out.println("Too many goods in the factory. Current Size: " + producedGoods.size());
-//                    producedGoods.wait();
-//                        System.out.println("Now producing");
-//                    }
                     System.out.println("Added: " + this.name + " " + getSize());
                     this.producedGoods.add(getSize());
-
-//                producedGoods.notifyAll();
                 } finally {
                     producerLock.unlockWrite(stamp);
                 }
             }
         }
-
-
     }
 
     private int getSize() {
         synchronized (this.producedGoods) {
+            while (this.producedGoods.size() >= 10) {
+                try {
+                    this.producedGoods.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            this.producedGoods.notifyAll();
             return this.producedGoods.size();
         }
     }
-//        }
 }

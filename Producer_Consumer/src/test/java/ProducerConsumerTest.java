@@ -24,7 +24,7 @@ public class ProducerConsumerTest {
         Thread t2 = new Thread(cTwo::consume);
         Thread t5 = new Thread(c::consume);
 
-        t2.start();
-        t5.start();
+//        t2.start();
+//        t5.start();
     }
 }
