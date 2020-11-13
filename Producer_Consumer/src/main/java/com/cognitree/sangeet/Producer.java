@@ -5,8 +5,8 @@ import java.util.List;
 import static com.cognitree.sangeet.Locks.producerLock;
 
 public class Producer {
-    final List<Integer> producedGoods;
-    final String name;
+    private final List<Integer> producedGoods;
+    private final String name;
 
     public Producer(List<Integer> producedGoods, String name) {
         this.name = name;

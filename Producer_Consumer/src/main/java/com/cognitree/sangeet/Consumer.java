@@ -5,8 +5,8 @@ import java.util.List;
 import static com.cognitree.sangeet.Locks.consumerLock;
 
 public class Consumer {
-    final List<Integer> producedGoods;
-    final String name;
+    private final List<Integer> producedGoods;
+    private final String name;
 
     public Consumer(List<Integer> producedGoods, String name) {
         this.name = name;
