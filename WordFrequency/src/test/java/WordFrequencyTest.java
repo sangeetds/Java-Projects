@@ -1,62 +1,30 @@
 import com.cognitree.sangeet.sequential.WordFrequencySequential;
+import com.cognitree.sangeet.threadpool.WordFrequencyThreadPool;
 import com.cognitree.sangeet.threads.WordFrequencyThread;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class WordFrequencyTest {
     public static void main(String[] args) throws Exception {
         BufferedReader fileScanner = getBufferedReader();
         if (fileScanner == null) return;
 
-        WordFrequencySequential wordFrequencySequential = new WordFrequencySequential();
-        WordFrequencyThread wordFrequencyThread = new WordFrequencyThread();
+//        WordFrequencySequential wordFrequencySequential = new WordFrequencySequential();
+//        WordFrequencyThread wordFrequencyThread = new WordFrequencyThread();
+        WordFrequencyThreadPool wordFreqTPool = new WordFrequencyThreadPool();
+
 
 //        sequentialTest(fileScanner, wordFrequencySequential);
-        threadedTest(fileScanner, wordFrequencyThread);
-    }
-
-    private static void threadedTest(BufferedReader fileScanner, WordFrequencyThread wordFrequencyThread) {
         System.out.println("Threading test: ");
+//        wordFrequencyThread.reportThreadCount(fileScanner, "lorem");
 
-        Thread t1 = new Thread(() -> {
-            System.out.println("Storing lines: " + System.nanoTime() / 1_000_000);
-            while (true) {
-                final String currLine;
-                try {
-                    currLine = fileScanner.readLine();
-                } catch (IOException e) {
-                    break;
-                }
-
-                if (currLine == null) break;
-
-                try {
-                    wordFrequencyThread.storeLine(currLine);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            wordFrequencyThread.setLinesOver();
-        });
-
-        Thread t2 = new Thread(() -> {
-            System.out.println(wordFrequencyThread.reportCaseInsensitiveWordCount("Lorem"));
-        });
-
-        t1.start();
-        t2.start();
-        try {
-            t1.join();
-            t2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(System.nanoTime() / 1_000_000);
+//        wordFreqTPool.reportThreadPoolCount(fileScanner, "lorem");
+        System.out.println(wordFreqTPool.reportThreadPoolCountFuture(fileScanner, "lorem"));
+        System.out.println("Test over: " + System.nanoTime() / 1_000_000);
     }
+
+
 
     private static void sequentialTest(BufferedReader fileScanner, WordFrequencySequential wordFrequencySequential) throws Exception {
         System.out.println("Sequential test: ");

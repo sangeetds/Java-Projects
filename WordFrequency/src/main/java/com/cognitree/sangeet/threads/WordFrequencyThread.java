@@ -3,19 +3,57 @@ package com.cognitree.sangeet.threads;
 import com.cognitree.sangeet.WordFrequency;
 import com.cognitree.sangeet.exceptions.LineException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WordFrequencyThread extends WordFrequency {
     private final List<String> hay;
     private long lines;
-    private boolean linesOver;
-    public long totalLines;
+    private AtomicBoolean linesOver;
+    private long totalLines;
 
     public WordFrequencyThread() {
         this.hay = new ArrayList<>();
         this.lines = 0;
-        this.linesOver = false;
+        this.linesOver = new AtomicBoolean(false);
+    }
+
+    public void reportThreadCount(BufferedReader fileScanner, String needle) {
+        Thread t1 = new Thread(() -> {
+            System.out.println("Storing lines: " + System.nanoTime() / 1_000_000);
+            while (true) {
+                final String currLine;
+                try {
+                    currLine = fileScanner.readLine();
+                } catch (IOException e) {
+                    break;
+                }
+
+                if (currLine == null) break;
+
+                try {
+                    storeLine(currLine);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            setLinesOver();
+        });
+
+        Thread t2 = new Thread(() -> System.out.println(reportCaseInsensitiveWordCount(needle)));
+
+        t1.start();
+        t2.start();
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -34,7 +72,7 @@ public class WordFrequencyThread extends WordFrequency {
 
     public long reportCaseInsensitiveWordCount(String needle) {
         String currentLine;
-        Long frequency = 0L;
+        long frequency = 0L;
 
         while ((currentLine = getCurrentLine()) != null) {
             frequency += super.getFrequency(needle, currentLine);
@@ -49,7 +87,7 @@ public class WordFrequencyThread extends WordFrequency {
                 if (this.lines >= 170939) return null;
 
                 try {
-//                    System.out.println("wait " + this.lines + " " + this.totalLines);
+//                    System.out.println("wait " + this.lines + " " + isLinesOver());
                     this.hay.wait();
 //                    System.out.println("no wait " + this.lines);
                 }
@@ -67,11 +105,10 @@ public class WordFrequencyThread extends WordFrequency {
     }
 
     public void setLinesOver() {
-        this.linesOver = true;
-        this.totalLines = this.hay.size();
+        this.linesOver = new AtomicBoolean(true);
     }
 
     public boolean isLinesOver() {
-        return linesOver;
+        return linesOver.equals(new AtomicBoolean(true));
     }
 }
