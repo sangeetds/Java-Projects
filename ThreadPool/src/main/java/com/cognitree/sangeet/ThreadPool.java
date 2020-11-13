@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.concurrent.*;
 
 public class ThreadPool {
-    private final List<Thread> threads;
     private final BlockingQueue<Object> runnableQueue;
-    private final int MaxThreads = 32;
+    private final int MaxThreads = Runtime.getRuntime().availableProcessors();
 
     public ThreadPool() throws Exception {
-        this(8);
+        this(Runtime.getRuntime().availableProcessors() / 4);
     }
 
     public ThreadPool(int threadsRequested) throws Exception {
@@ -18,7 +17,7 @@ public class ThreadPool {
             throw requestExceededException();
         }
         this.runnableQueue = new LinkedBlockingQueue<>();
-        this.threads = new ArrayList<>();
+        List<Thread> threads = new ArrayList<>();
 
         for (int index = 0; index < threadsRequested; index++) {
             Thread newThread = new Thread(() -> {
@@ -55,7 +54,7 @@ public class ThreadPool {
                 }
             });
 
-            this.threads.add(newThread);
+            threads.add(newThread);
             newThread.start();
         }
 
