@@ -54,4 +54,15 @@ final public class BuyData {
     public int hashCode() {
         return Objects.hash(getSessionId(), getTimestamp(), getItemId(), getPrice(), getQuantity());
     }
+
+    @Override
+    public String toString() {
+        return "BuyData{" +
+                "sessionId=" + sessionId +
+                ", timestamp=" + timestamp +
+                ", itemId=" + itemId +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

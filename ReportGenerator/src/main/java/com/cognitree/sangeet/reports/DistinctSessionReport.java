@@ -30,10 +30,16 @@ class DistinctSessionReport implements Report {
 
     @Override
     public void saveToOutput() {
-        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
+        try {
+            ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
 
-        sessionList.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));
-
-        FileBufferUtil.closeFile();
+            sessionList.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));
+        }
+        catch (Exception e) {
+            System.out.println("Problems writing to the write");
+        }
+        finally {
+            FileBufferUtil.closeFile();
+        }
     }
 }

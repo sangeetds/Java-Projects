@@ -28,13 +28,19 @@ class AverageQuantityReport extends FileBufferUtil implements Report {
 
     @Override
     public void saveToOutput() {
-        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
+        try {
+            ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
 
-        averageQuantity.forEach((key, value) -> {
-            Double avgQuantity = new HashSet<>(value).size() / (double) value.size();
-            byteBuffer.put((key + " " + avgQuantity + "\n").getBytes());
-        });
-
-        FileBufferUtil.closeFile();
+            averageQuantity.forEach((key, value) -> {
+                Double avgQuantity = new HashSet<>(value).size() / (double) value.size();
+                byteBuffer.put((key + " " + avgQuantity + "\n").getBytes());
+            });
+        }
+        catch(Exception e) {
+            System.out.println("Problems writing to the file");
+        }
+        finally {
+            FileBufferUtil.closeFile();
+        }
     }
 }

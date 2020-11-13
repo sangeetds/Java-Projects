@@ -30,10 +30,16 @@ class PurchaseEventCountReport extends FileBufferUtil implements Report {
 
     @Override
     public void saveToOutput() {
-        ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 14000);
+        try {
+            ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 14000);
 
-        itemCount.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));
-
-        FileBufferUtil.closeFile();
+            itemCount.forEach((key, value) -> byteBuffer.put((key + " " + value + "\n").getBytes()));
+        }
+        catch (Exception e) {
+            System.out.println("Problems writing to the file");
+        }
+        finally {
+            FileBufferUtil.closeFile();
+        }
     }
 }
