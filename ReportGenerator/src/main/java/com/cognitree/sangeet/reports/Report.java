@@ -7,5 +7,5 @@ import java.util.List;
 //
 public interface Report {
     void aggregate(List<BuyData> buyData);
-    void saveToOutput();
+    void saveOutput();
 }

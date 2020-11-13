@@ -92,7 +92,7 @@ public class AnalyzeData {
     }
 
     public void generateAllReports() {
-        ReportsProvider.getReportsProvider().getReports().forEach(Report::saveToOutput);
+        ReportsProvider.getReportsProvider().getReports().forEach(Report::saveOutput);
     }
 
     private void aggregateData(List<BuyData> currentData, List<Report> reports) {

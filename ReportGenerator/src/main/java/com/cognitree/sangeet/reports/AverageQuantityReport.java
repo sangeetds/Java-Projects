@@ -27,7 +27,7 @@ class AverageQuantityReport extends FileBufferUtil implements Report {
     }
 
     @Override
-    public void saveToOutput() {
+    public void saveOutput() {
         try {
             ByteBuffer byteBuffer = FileBufferUtil.getByteBuffer(fileName, count * 20000);
 
