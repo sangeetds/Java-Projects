@@ -38,9 +38,7 @@ public class WordFrequencyThreadPool extends WordFrequencyThread {
             return null;
         };
 
-        Callable<Long> c2 = () -> {
-            return super.reportCaseInsensitiveWordCount(needle);
-        };
+        Callable<Long> c2 = () -> super.reportCaseInsensitiveWordCount(needle);
 
         exService.submit(c1);
         Future<Long> freq = exService.submit(c2);
@@ -49,9 +47,18 @@ public class WordFrequencyThreadPool extends WordFrequencyThread {
             return freq.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            return 0L;
         }
-
-        return 0L;
+        finally {
+            exService.shutdown();
+            try {
+                if (!exService.awaitTermination(10000, TimeUnit.MILLISECONDS)) {
+                    exService.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                exService.shutdownNow();
+            }
+        }
     }
 
     public void reportThreadPoolCount(BufferedReader fileScanner, String needle) {

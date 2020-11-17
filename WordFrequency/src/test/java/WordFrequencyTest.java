@@ -1,9 +1,11 @@
 import com.cognitree.sangeet.sequential.WordFrequencySequential;
+import com.cognitree.sangeet.threadpool.WordFrequencyForkJoin;
 import com.cognitree.sangeet.threadpool.WordFrequencyThreadPool;
 import com.cognitree.sangeet.threads.WordFrequencyThread;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ForkJoinPool;
 
 public class WordFrequencyTest {
     public static void main(String[] args) throws Exception {
@@ -12,15 +14,26 @@ public class WordFrequencyTest {
 
 //        WordFrequencySequential wordFrequencySequential = new WordFrequencySequential();
 //        WordFrequencyThread wordFrequencyThread = new WordFrequencyThread();
-        WordFrequencyThreadPool wordFreqTPool = new WordFrequencyThreadPool();
+//        WordFrequencyThreadPool wordFreqTPool = new WordFrequencyThreadPool();
+        WordFrequencyForkJoin wordFreqFork = new WordFrequencyForkJoin();
 
 
 //        sequentialTest(fileScanner, wordFrequencySequential);
         System.out.println("Threading test: ");
 //        wordFrequencyThread.reportThreadCount(fileScanner, "lorem");
 
+        System.out.println("Storing lines: " + System.nanoTime() / 1_000_000);
+        String line;
+        while ((line = fileScanner.readLine()) != null) {
+            wordFreqFork.storeLine(line);
+        }
+        System.out.println("Counting frequencies: " + System.nanoTime() / 1_000_000);
+        wordFreqFork.setWord("lorem");
+        ForkJoinPool forkJoinPool = new ForkJoinPool(1);
+        System.out.println(forkJoinPool.invoke(wordFreqFork));
+
 //        wordFreqTPool.reportThreadPoolCount(fileScanner, "lorem");
-        System.out.println(wordFreqTPool.reportThreadPoolCountFuture(fileScanner, "lorem"));
+//        System.out.println(wordFreqTPool.reportThreadPoolCountFuture(fileScanner, "lorem"));
         System.out.println("Test over: " + System.nanoTime() / 1_000_000);
     }
 
