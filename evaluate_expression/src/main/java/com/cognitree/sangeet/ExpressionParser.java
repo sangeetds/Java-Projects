@@ -1,5 +1,6 @@
 package com.cognitree.sangeet;
 
+import com.cognitree.sangeet.operator.Operator;
 import com.cognitree.sangeet.operator.OperatorFactory;
 
 import java.util.ArrayList;
@@ -18,6 +19,12 @@ final public class ExpressionParser {
         }
 
         this.variableMap = new HashMap<>();
+        Operator op = new Operator() {
+            @Override
+            public Double[] evaluate(double[] operands) {
+                return new Double[0];
+            }
+        };
         this.isValueSet = false;
         this.isExpSet = true;
     }
