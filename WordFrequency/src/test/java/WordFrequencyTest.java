@@ -5,38 +5,22 @@ import com.cognitree.sangeet.threads.WordFrequencyThread;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.concurrent.ForkJoinPool;
+import java.util.Date;
+import java.util.Objects;
 
 public class WordFrequencyTest {
     public static void main(String[] args) throws Exception {
-        BufferedReader fileScanner = getBufferedReader();
-        if (fileScanner == null) return;
 
         WordFrequencySequential wordFrequencySequential = new WordFrequencySequential();
         WordFrequencyThread wordFrequencyThread = new WordFrequencyThread();
         WordFrequencyThreadPool wordFreqTPool = new WordFrequencyThreadPool();
         WordFrequencyForkJoin wordFreqFork = new WordFrequencyForkJoin();
-    }
-
-
-
-    private static void sequentialTest(BufferedReader fileScanner, WordFrequencySequential wordFrequencySequential) throws Exception {
-        System.out.println("Sequential test: ");
-        String line;
-        System.out.println("Storing lines: " + System.nanoTime() / 1_000_000);
-        while ((line = fileScanner.readLine()) != null) {
-            wordFrequencySequential.storeLine(line);
-        }
-
-        System.out.println("Counting frequencies: " + System.nanoTime() / 1_000_000);
-        System.out.println("Insensitive sans stream: " + wordFrequencySequential.reportCaseInsensitiveWordCount("lorem"));
-        System.out.println(System.nanoTime() / 1_000_000);
-        System.out.println("Sensitive sans stream: " + wordFrequencySequential.reportCaseSensitiveWordCount("lorem"));
-        System.out.println(System.nanoTime() / 1_000_000);
-        System.out.println("Insensitive w stream: " + wordFrequencySequential.reportStreamCaseInsensitiveWordCount("lorem"));
-        System.out.println(System.nanoTime() / 1_000_000);
-        System.out.println("Sensitive w stream: " + wordFrequencySequential.reportStreamCaseSensitiveWordCount("Lorem"));
-        System.out.println(System.nanoTime() / 1_000_000);
+        wordFrequencySequential.sequentialTest(Objects.requireNonNull(getBufferedReader()));
+        wordFrequencyThread.reportWordCount(Objects.requireNonNull(getBufferedReader()), "lorem");
+        wordFreqTPool.reportThreadPoolCount(Objects.requireNonNull(getBufferedReader()), "lorem");
+        System.out.println("Thread pooling with future: " + wordFreqTPool.reportThreadPoolCountFuture(Objects.requireNonNull(getBufferedReader()), "lorem") + " finished at: " + (new Date()).toString().split("\\s+")[3]);
+        wordFreqFork.setWord("lorem");
+        wordFreqFork.reportWordCount(Objects.requireNonNull(getBufferedReader()));
     }
 
     private static BufferedReader getBufferedReader() {

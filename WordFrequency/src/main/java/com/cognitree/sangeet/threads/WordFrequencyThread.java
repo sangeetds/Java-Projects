@@ -6,6 +6,7 @@ import com.cognitree.sangeet.exceptions.LineException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -21,9 +22,10 @@ public class WordFrequencyThread extends WordFrequency {
         this.linesOver = new AtomicBoolean(false);
     }
 
-    public void reportThreadCount(BufferedReader fileScanner, String needle) {
+    public void reportWordCount(BufferedReader fileScanner, String needle) {
+        System.out.println("Thread without pool test starting at: " + (new Date()).toString().split("\\s+")[3]);
+
         Thread t1 = new Thread(() -> {
-            System.out.println("Storing lines: " + System.nanoTime() / 1_000_000);
             while (true) {
                 final String currLine;
                 try {
@@ -44,7 +46,7 @@ public class WordFrequencyThread extends WordFrequency {
             setLinesOver();
         });
 
-        Thread t2 = new Thread(() -> System.out.println(reportCaseInsensitiveWordCount(needle)));
+        Thread t2 = new Thread(() -> System.out.println("Words matched with simple threading: " + reportCaseInsensitiveWordCount(needle) + " finished at: " + (new Date()).toString().split("\\s+")[3]));
 
         t1.start();
         t2.start();
@@ -84,12 +86,10 @@ public class WordFrequencyThread extends WordFrequency {
     private String getCurrentLine() {
         synchronized (this.hay) {
             while (this.lines >= this.hay.size()) {
-                if (this.lines >= 170939) return null;
+                if (this.lines >= 170390) return null;
 
                 try {
-//                    System.out.println("wait " + this.lines + " " + isLinesOver());
                     this.hay.wait();
-//                    System.out.println("no wait " + this.lines);
                 }
                 catch (InterruptedException e) {
                     System.out.println("Thread interrupted");

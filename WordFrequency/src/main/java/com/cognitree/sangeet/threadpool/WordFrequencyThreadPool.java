@@ -4,19 +4,20 @@ import com.cognitree.sangeet.threads.WordFrequencyThread;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.*;
 
 public class WordFrequencyThreadPool extends WordFrequencyThread {
-    private final ExecutorService exService;
 
     public WordFrequencyThreadPool() {
         super();
-        this.exService = Executors.newFixedThreadPool(2);
     }
 
     public Long reportThreadPoolCountFuture(BufferedReader fileScanner, String needle) {
+        ExecutorService exService = Executors.newFixedThreadPool(32);
+        System.out.println("Thread with pool and future test starting at: " + (new Date()).toString().split("\\s+")[3]);
+
         Callable<Void> c1 = () -> {
-            System.out.println("Storing lines: " + System.nanoTime() / 1_000_000);
             while (true) {
                 final String currLine;
                 try {
@@ -62,8 +63,10 @@ public class WordFrequencyThreadPool extends WordFrequencyThread {
     }
 
     public void reportThreadPoolCount(BufferedReader fileScanner, String needle) {
+        ExecutorService exService = Executors.newFixedThreadPool(32);
+        System.out.println("Thread with pool test starting at: " + (new Date()).toString().split("\\s+")[3]);
+
         exService.execute(() -> {
-            System.out.println("Storing lines: " + System.nanoTime() / 1_000_000);
             while (true) {
                 final String currLine;
                 try {
@@ -84,7 +87,7 @@ public class WordFrequencyThreadPool extends WordFrequencyThread {
             setLinesOver();
         });
 
-        exService.submit(() -> System.out.println(super.reportCaseInsensitiveWordCount(needle)));
+        exService.submit(() -> System.out.println("Words counted with pool and without future " + super.reportCaseInsensitiveWordCount(needle) + " finished at: " + (new Date()).toString().split("\\s+")[3]));
 
         exService.shutdown();
         try {

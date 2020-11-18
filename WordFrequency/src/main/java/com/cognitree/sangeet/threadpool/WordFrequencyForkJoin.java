@@ -3,7 +3,10 @@ package com.cognitree.sangeet.threadpool;
 import com.cognitree.sangeet.exceptions.EmptyWordException;
 import com.cognitree.sangeet.exceptions.LineException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.RecursiveTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -74,5 +77,16 @@ public class WordFrequencyForkJoin extends RecursiveTask<Long> {
 
             return tempWFFJTwo.compute() + tempWFFJOne.join();
         }
+    }
+
+    public void reportWordCount(BufferedReader fileScanner) throws Exception {
+        System.out.println("Fork Join test starting at: " + (new Date()).toString().split("\\s+")[3]);
+        String line;
+        while ((line = fileScanner.readLine()) != null) {
+            storeLine(line);
+        }
+
+        System.out.println("Insensitive word count with fork and join: " + this.invoke() + " completed at: " + (new Date()).toString().split("\\s+")[3]);
+
     }
 }
