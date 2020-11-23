@@ -1,114 +1,63 @@
 package com.cognitree.sangeet.threads;
 
+import com.cognitree.sangeet.DataBatch;
 import com.cognitree.sangeet.WordFrequency;
-import com.cognitree.sangeet.exceptions.LineException;
+import com.cognitree.sangeet.exceptions.SearchWordInvalidException;
+import com.cognitree.sangeet.processExecutor.ProcessExecutor;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.HashMap;
+import java.util.Map;
 
 public class WordFrequencyThread extends WordFrequency {
-    private final List<String> hay;
-    private long lines;
-    private AtomicBoolean linesOver;
-    private long totalLines;
+    private final ProcessExecutor processExecutor;
+    private final Map<String, Long> wordCountMap;
 
     public WordFrequencyThread() {
-        this.hay = new ArrayList<>();
-        this.lines = 0;
-        this.linesOver = new AtomicBoolean(false);
-    }
-
-    public void reportWordCount(BufferedReader fileScanner, String needle) {
-        System.out.println("Thread without pool test starting at: " + (new Date()).toString().split("\\s+")[3]);
-
-        Thread t1 = new Thread(() -> {
-            while (true) {
-                final String currLine;
-                try {
-                    currLine = fileScanner.readLine();
-                } catch (IOException e) {
-                    break;
-                }
-
-                if (currLine == null) break;
-
-                try {
-                    storeLine(currLine);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            setLinesOver();
-        });
-
-        Thread t2 = new Thread(() -> System.out.println("Words matched with simple threading: " + reportCaseInsensitiveWordCount(needle) + " finished at: " + (new Date()).toString().split("\\s+")[3]));
-
-        t1.start();
-        t2.start();
-        try {
-            t1.join();
-            t2.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        this.processExecutor = new ProcessExecutor();
+        this.wordCountMap = new HashMap<>();
     }
 
     @Override
-    public void storeLine(String newLine) throws Exception {
-        if (newLine == null) {
-            throw LineException.InvalidLineException();
-        }
+    public Long getFrequency(String word) throws Exception {
+        Long frequency = this.get(word);
 
-        this.totalLines++;
-
-        synchronized (this.hay) {
-            this.hay.add(newLine);
-            this.hay.notifyAll();
-        }
-    }
-
-    public long reportCaseInsensitiveWordCount(String needle) {
-        String currentLine;
-        long frequency = 0L;
-
-        while ((currentLine = getCurrentLine()) != null) {
-            frequency += super.getFrequency(needle, currentLine);
+        if (frequency == null) {
+            throw new SearchWordInvalidException();
         }
 
         return frequency;
     }
 
-    private String getCurrentLine() {
-        synchronized (this.hay) {
-            while (this.lines >= this.hay.size()) {
-                if (this.lines >= 170390) return null;
-
-                try {
-                    this.hay.wait();
-                }
-                catch (InterruptedException e) {
-                    System.out.println("Thread interrupted");
-                }
-            }
-
-            String returnString = this.hay.get((int) this.lines);
-            this.lines++;
-//            this.hay.notifyAll();
-
-            return returnString;
+    @Override
+    public void countEveryWords(DataBatch dataBatch) {
+        long time = System.nanoTime();
+        long secondTime;
+        long total = 0;
+        for (int index = 0; index < dataBatch.getSize(); index++) {
+            String dataLine = dataBatch.take(index);
+            secondTime = System.nanoTime();
+            Map<String, Long> a = super.calculateFrequency(dataLine);
+            total += System.nanoTime() - secondTime;
+            a.forEach(dataBatch::put);
         }
+        System.out.println("Time taken for just calculating and storing the frequency for " + dataBatch.getSize() + " " + (System.nanoTime() - time) / 1_000_000_000d + " " + Thread.currentThread().getName());
+        System.out.println("Time taken just for the calculation part: " + total / 1_000_000_000d);
     }
 
-    public void setLinesOver() {
-        this.linesOver = new AtomicBoolean(true);
+    public void processFile(BufferedReader fileScanner) throws InterruptedException {
+        processExecutor.startThreadProcess(fileScanner, this);
     }
 
-    public boolean isLinesOver() {
-        return linesOver.equals(new AtomicBoolean(true));
+    public void put(String word, Long frequency) {
+        this.wordCountMap.put(word, this.wordCountMap.getOrDefault(word, 0L) + frequency);
+    }
+
+    protected Long get(String word) {
+        return wordCountMap.get(word);
+    }
+
+    protected ProcessExecutor getProcessExecutor() {
+        return processExecutor;
     }
 }

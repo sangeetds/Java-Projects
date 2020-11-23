@@ -1,69 +1,53 @@
 package com.cognitree.sangeet.sequential;
 
+import com.cognitree.sangeet.DataBatch;
 import com.cognitree.sangeet.WordFrequency;
-import com.cognitree.sangeet.exceptions.LineException;
+import com.cognitree.sangeet.exceptions.SearchWordInvalidException;
+import com.cognitree.sangeet.processExecutor.ProcessExecutor;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Map;
 
 public class WordFrequencySequential extends WordFrequency {
+    private final Map<String, Long> wordCountMap;
     private final List<String> hay;
+    private final ProcessExecutor processExecutor;
 
     public WordFrequencySequential() {
         this.hay = new ArrayList<>();
+        this.wordCountMap = new HashMap<>();
+        this.processExecutor = new ProcessExecutor();
     }
 
-    @Override
-    public void storeLine(String newLine) throws Exception {
-        if (newLine == null) {
-            throw LineException.InvalidLineException();
-        }
+    public void storeLine(String newLine) {
 
         this.hay.add(newLine);
     }
 
-    public long reportCaseInsensitiveWordCount(String needle) {
-        long frequency = 0;
+    @Override
+    public Long getFrequency(String word) throws Exception {
+        Long frequency = wordCountMap.get(word);
 
-        for (String line: this.hay) {
-            frequency += super.getFrequency(needle, line);
+        if (frequency == null) {
+            throw new SearchWordInvalidException();
         }
 
         return frequency;
     }
 
-    public long reportCaseSensitiveWordCount(String needle) {
-        long frequency = 0;
-
-        for (String currentLine : this.hay) {
-            for (String splitLine : currentLine.split("\\s+")) {
-                if (splitLine.equals(needle)) {
-                    frequency++;
-                }
-            }
-        }
-
-        return frequency;
+    @Override
+    public void countEveryWords(DataBatch dataBatch) {
+        this.hay.forEach((dataLine) -> super.calculateFrequency(dataLine).forEach((word, frequency) -> this.wordCountMap.put(word, this.wordCountMap.getOrDefault(word, 0L) + frequency)));
     }
 
-    public long reportStreamCaseInsensitiveWordCount(String needle) {
-        return this.hay.stream().flatMap(line -> Stream.of(line.split("\\s+"))).filter(str -> str.equalsIgnoreCase(needle)).count();
+    public void processFile(BufferedReader fileScanner) {
+        processExecutor.sequentialProcess(fileScanner, this);
     }
 
-    public long reportStreamCaseSensitiveWordCount(String needle) {
-        return this.hay.stream().flatMap(line -> Stream.of(line.split("\\s+"))).filter(str -> str.equals(needle)).count();
-    }
-
-    public void sequentialTest(BufferedReader fileScanner) throws Exception {
-        System.out.println("Sequential test starting at: " + (new Date()).toString().split("\\s+")[3]);
-        String line;
-        while ((line = fileScanner.readLine()) != null) {
-            storeLine(line);
-        }
-
-        System.out.println("Insensitive sans stream: " + reportCaseInsensitiveWordCount("lorem") + " completed at: " + (new Date()).toString().split("\\s+")[3]);
+    public int getSize() {
+        return this.hay.size();
     }
 }
