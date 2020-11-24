@@ -11,16 +11,16 @@ import java.util.Map;
 
 public class WordFrequencyThread extends WordFrequency {
     private final ProcessExecutor processExecutor;
-    private final Map<String, Long> wordCountMap;
+    private final Map<String, Long> frequencyMap;
 
     public WordFrequencyThread() {
         this.processExecutor = new ProcessExecutor();
-        this.wordCountMap = new HashMap<>();
+        this.frequencyMap = new HashMap<>();
     }
 
     @Override
     public Long getFrequency(String word) throws Exception {
-        Long frequency = this.get(word);
+        Long frequency = this.frequencyMap.get(word);
 
         if (frequency == null) {
             throw new SearchWordInvalidException();
@@ -32,14 +32,15 @@ public class WordFrequencyThread extends WordFrequency {
     @Override
     public void countEveryWords(DataBatch dataBatch) {
         long time = System.nanoTime();
-        long secondTime;
         long total = 0;
 
         for (int index = 0; index < dataBatch.getSize(); index++) {
             String dataLine = dataBatch.take(index);
-            secondTime = System.nanoTime();
+
+            long secondTime = System.nanoTime();
             Map<String, Long> a = super.calculateFrequency(dataLine);
             total += System.nanoTime() - secondTime;
+
             a.forEach(dataBatch::put);
         }
 
@@ -48,18 +49,14 @@ public class WordFrequencyThread extends WordFrequency {
     }
 
     public void processFile(BufferedReader fileScanner) throws InterruptedException {
-        processExecutor.startThreadProcess(fileScanner, this);
+        this.processExecutor.startThreadProcess(fileScanner, this);
     }
 
     public void put(String word, Long frequency) {
-        this.wordCountMap.put(word, this.wordCountMap.getOrDefault(word, 0L) + frequency);
-    }
-
-    protected Long get(String word) {
-        return wordCountMap.get(word);
+        this.frequencyMap.put(word, this.frequencyMap.getOrDefault(word, 0L) + frequency);
     }
 
     protected ProcessExecutor getProcessExecutor() {
-        return processExecutor;
+        return this.processExecutor;
     }
 }

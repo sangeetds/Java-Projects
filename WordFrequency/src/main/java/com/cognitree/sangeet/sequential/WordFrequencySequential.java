@@ -12,25 +12,17 @@ import java.util.List;
 import java.util.Map;
 
 public class WordFrequencySequential extends WordFrequency {
-    private final Map<String, Long> wordCountMap;
     private final List<String> hay;
-    private final ProcessExecutor processExecutor;
+    private final Map<String, Long> frequencyMap;
 
     public WordFrequencySequential() {
         this.hay = new ArrayList<>();
-        this.wordCountMap = new HashMap<>();
-        this.processExecutor = new ProcessExecutor();
-    }
-
-    public void storeLine(String newLine) {
-
-        this.hay.add(newLine);
+        this.frequencyMap = new HashMap<>();
     }
 
     @Override
     public Long getFrequency(String word) throws Exception {
-        Long frequency = wordCountMap.get(word);
-        this.wordCountMap.forEach((w, value) -> System.out.println(w + " " + value));
+        Long frequency = this.frequencyMap.get(word);
 
         if (frequency == null) {
             throw new SearchWordInvalidException();
@@ -41,14 +33,19 @@ public class WordFrequencySequential extends WordFrequency {
 
     @Override
     public void countEveryWords(DataBatch dataBatch) {
-        this.hay.forEach((dataLine) -> super.calculateFrequency(dataLine).forEach((word, frequency) -> this.wordCountMap.put(word, this.wordCountMap.getOrDefault(word, 0L) + frequency)));
-    }
-
-    public void processFile(BufferedReader fileScanner) {
-        processExecutor.sequentialProcess(fileScanner, this);
+        this.hay.forEach((dataLine) -> super.calculateFrequency(dataLine).forEach((word, frequency) -> this.frequencyMap.put(word, this.frequencyMap.getOrDefault(word, 0L) + frequency)));
     }
 
     public int getSize() {
         return this.hay.size();
+    }
+
+    public void storeLine(String newLine) {
+        this.hay.add(newLine);
+    }
+
+    public void processFile(BufferedReader fileScanner) {
+        ProcessExecutor processExecutor = new ProcessExecutor();
+        processExecutor.sequentialProcess(fileScanner, this);
     }
 }

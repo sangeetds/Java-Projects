@@ -30,10 +30,6 @@ public class WordFrequencyThreadPool extends WordFrequencyThread {
         super.put(word, frequency);
     }
 
-    protected Long get(String word) {
-        return super.get(word);
-    }
-
     public void countEveryWords(DataBatch dataBatch) {
         super.countEveryWords(dataBatch);
     }

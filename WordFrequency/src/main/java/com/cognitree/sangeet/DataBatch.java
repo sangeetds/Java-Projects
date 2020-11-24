@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-public class DataBatch {
+final public class DataBatch {
     private final List<String> hay;
     private final HashMap<String, Long> wordCountMap;
 
     public DataBatch() {
         this.hay = new ArrayList<>();
-        wordCountMap = new HashMap<>();
+        this.wordCountMap = new HashMap<>();
     }
 
     public void add(String line) {
@@ -22,7 +22,7 @@ public class DataBatch {
         return this.hay.size();
     }
 
-    public synchronized boolean isEmpty() {
+    public boolean isEmpty() {
         return this.getSize() == 0;
     }
 
@@ -38,12 +38,12 @@ public class DataBatch {
         this.wordCountMap.put(word, this.wordCountMap.getOrDefault(word, 0L) + frequency);
     }
 
-    public Long get(String word) {
-        return wordCountMap.get(word);
+    public Long getWord(String word) {
+        return this.wordCountMap.get(word);
     }
 
     public HashMap<String, Long> getMap() {
-        return wordCountMap;
+        return this.wordCountMap;
     }
 
     public DataBatch subBatch(int mid, int size) {
