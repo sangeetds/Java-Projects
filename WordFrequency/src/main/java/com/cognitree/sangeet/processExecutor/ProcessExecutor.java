@@ -133,7 +133,7 @@ public class ProcessExecutor {
 
     public void forkJoinProcess(BufferedReader fileScanner, WordFrequencyForkJoin wordFrequencyForkJoin) {
         String line = null;
-        ForkJoinPool forkJoinPool = new ForkJoinPool(2);
+        ForkJoinPool forkJoinPool = new ForkJoinPool(8);
 
         long timeA = System.nanoTime();
         while (true) {

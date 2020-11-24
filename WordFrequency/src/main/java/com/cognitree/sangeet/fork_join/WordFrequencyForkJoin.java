@@ -47,7 +47,7 @@ public class WordFrequencyForkJoin extends RecursiveTask<HashMap<String, Long>> 
 
     @Override
     protected HashMap<String, Long> compute() {
-        if (upperBound - lowerBound <= 150000) {
+        if (upperBound - lowerBound <= 50000) {
             HashMap<String, Long> tempMap = new HashMap<>();
             long currTime = System.nanoTime();
             long time = 0;
@@ -69,8 +69,8 @@ public class WordFrequencyForkJoin extends RecursiveTask<HashMap<String, Long>> 
             return tempMap;
         } else {
             int mid = (upperBound + lowerBound) / 2;
-            WordFrequencyForkJoin tempWFFJOne = new WordFrequencyForkJoin(this.hay, 0, mid);
-            WordFrequencyForkJoin tempWFFJTwo = new WordFrequencyForkJoin(this.hay, mid, this.hay.size());
+            WordFrequencyForkJoin tempWFFJOne = new WordFrequencyForkJoin(this.hay, this.lowerBound, mid);
+            WordFrequencyForkJoin tempWFFJTwo = new WordFrequencyForkJoin(this.hay, mid + 1, this.getUpperBound());
             tempWFFJOne.fork();
 
             HashMap<String, Long> secondMap = tempWFFJTwo.compute();
