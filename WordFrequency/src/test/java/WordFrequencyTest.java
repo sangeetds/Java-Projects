@@ -9,6 +9,11 @@ public class WordFrequencyTest {
 
         long a = System.nanoTime();
         wordFrequency.processFile(fileScanner);
+        try {
+            wordFrequency.getFrequency("lorem");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println("The time for the whole sequential process: " + (System.nanoTime() - a) / 1_000_000_000d);
     }
 }

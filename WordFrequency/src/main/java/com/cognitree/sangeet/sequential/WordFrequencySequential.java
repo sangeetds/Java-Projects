@@ -30,6 +30,7 @@ public class WordFrequencySequential extends WordFrequency {
     @Override
     public Long getFrequency(String word) throws Exception {
         Long frequency = wordCountMap.get(word);
+        this.wordCountMap.forEach((w, value) -> System.out.println(w + " " + value));
 
         if (frequency == null) {
             throw new SearchWordInvalidException();

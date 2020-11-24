@@ -34,6 +34,7 @@ public class WordFrequencyThread extends WordFrequency {
         long time = System.nanoTime();
         long secondTime;
         long total = 0;
+
         for (int index = 0; index < dataBatch.getSize(); index++) {
             String dataLine = dataBatch.take(index);
             secondTime = System.nanoTime();
@@ -41,7 +42,8 @@ public class WordFrequencyThread extends WordFrequency {
             total += System.nanoTime() - secondTime;
             a.forEach(dataBatch::put);
         }
-        System.out.println("Time taken for just calculating and storing the frequency for " + dataBatch.getSize() + " " + (System.nanoTime() - time) / 1_000_000_000d + " " + Thread.currentThread().getName());
+
+        System.out.println("Time taken for just calculating and storing the frequency for " + dataBatch.getSize() + " lines: " + (System.nanoTime() - time) / 1_000_000_000d);
         System.out.println("Time taken just for the calculation part: " + total / 1_000_000_000d);
     }
 

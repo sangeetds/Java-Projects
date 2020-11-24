@@ -1,6 +1,7 @@
 package com.cognitree.sangeet.processExecutor;
 
 import com.cognitree.sangeet.DataBatch;
+import com.cognitree.sangeet.fork_join.WordFrequencyForkJoin;
 import com.cognitree.sangeet.sequential.WordFrequencySequential;
 import com.cognitree.sangeet.threads.WordFrequencyThread;
 import com.cognitree.sangeet.threads.WordFrequencyThreadPool;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 public class ProcessExecutor {
@@ -31,10 +33,10 @@ public class ProcessExecutor {
 
         System.out.println("Time taken for processing the file: " + (System.nanoTime() - time) / 1_000_000_000d);
 
-        long timeB = System.nanoTime();
+        time = System.nanoTime();
         wordFrequencySequential.countEveryWords(null);
         System.out.println((wordFrequencySequential.ind / 1_000_000_000d) + " == ");
-        System.out.println("Time taken for getting the frequency(whole): " + (System.nanoTime() - timeB) / 1_000_000_000d);
+        System.out.println("Time taken for getting the frequency(whole): " + (System.nanoTime() - time) / 1_000_000_000d);
     }
 
     public void startThreadProcess(BufferedReader fileScanner, WordFrequencyThread wordFrequencyThread) throws InterruptedException {
@@ -70,12 +72,12 @@ public class ProcessExecutor {
 
         System.out.println("Time taken for processing the file: " + (System.nanoTime() - time) / 1_000_000_000d);
 
-        long timeB = System.nanoTime();
+        time = System.nanoTime();
         for (Thread thread : workerThreads) {
             thread.join();
         }
 
-        pollData(wordFrequencyThread, batches, timeB);
+        pollData(wordFrequencyThread, batches, time);
     }
 
     public void startThreadPoolProcess(BufferedReader fileScanner, WordFrequencyThreadPool wordFrequencyThreadPool) throws InterruptedException {
@@ -110,11 +112,11 @@ public class ProcessExecutor {
 
         System.out.println("Time taken for processing the file : " + (System.nanoTime() - time) / 1_000_000_000d);
 
-        long timeB = System.nanoTime();
+        time = System.nanoTime();
         exService.shutdown();
         exService.awaitTermination(5000, TimeUnit.MILLISECONDS);
 
-        pollData(wordFrequencyThreadPool, batches, timeB);
+        pollData(wordFrequencyThreadPool, batches, time);
     }
 
     private void pollData(WordFrequencyThread wordFrequencyThread, List<DataBatch> batches, long timeB) {
@@ -127,5 +129,29 @@ public class ProcessExecutor {
         });
 
         System.out.println("Time taken for polling the data: " + (System.nanoTime() - timeC) / 1_000_000_000d);
+    }
+
+    public void forkJoinProcess(BufferedReader fileScanner, WordFrequencyForkJoin wordFrequencyForkJoin) {
+        String line = null;
+        ForkJoinPool forkJoinPool = new ForkJoinPool(2);
+
+        long timeA = System.nanoTime();
+        while (true) {
+            try {
+                if ((line = fileScanner.readLine()) == null) break;
+            } catch (IOException e) {
+                System.out.println("Problem with the file input at " + wordFrequencyForkJoin.getUpperBound());
+            }
+            wordFrequencyForkJoin.storeLine(line);
+        }
+        System.out.println("Time taken to read the file: " + (System.nanoTime() - timeA) / 1_000_000_000d);
+
+        timeA = System.nanoTime();
+        HashMap<String, Long> frequencyResult = forkJoinPool.invoke(wordFrequencyForkJoin);
+        System.out.println("Time taken for the fork join action: " + (System.nanoTime() - timeA) / 1_000_000_000d);
+
+        timeA = System.nanoTime();
+        frequencyResult.forEach(wordFrequencyForkJoin::put);
+        System.out.println("Time taken for polling the data: " + (System.nanoTime() - timeA) / 1_000_000_000d);
     }
 }
