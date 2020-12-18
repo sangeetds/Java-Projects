@@ -1,14 +1,10 @@
 package com.cognitree.sangeet.library.Repository;
 
-import com.cognitree.sangeet.library.Enum.Action;
 import com.cognitree.sangeet.library.Model.Book;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DatabaseService {
     private final Connection connection;
@@ -18,34 +14,41 @@ public class DatabaseService {
     }
 
     public List<Book> executeGetQuery(String QUERY) {
-        System.out.println(QUERY);
-        List<Book> initialBookMap = new ArrayList<>();
+        List<Book> initialBookList = new ArrayList<>();
+        ResultSet resultSet = null;
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(QUERY);
-            ResultSet rs = preparedStatement.executeQuery();
+            resultSet = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String title = rs.getString("title");
-                String author = rs.getString("author");
-                Boolean reserved = rs.getInt("reserved") == 1;
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                Boolean reserved = resultSet.getInt("reserved") == 1;
 
                 Book newBook = new Book((long) id, title, author, reserved);
-                initialBookMap.add(newBook);
+                initialBookList.add(newBook);
             }
-
-            rs.close();
         } catch (SQLException e) {
             DatabaseConnection.printSQLException(e);
+        } finally {
+            if (resultSet != null) {
+                try {
+                    resultSet.close();
+                } catch (SQLException throwable) {
+                    DatabaseConnection.printSQLException(throwable);
+                }
+            }
         }
 
-        return initialBookMap;
+        return initialBookList;
     }
 
 
     public void executeUpdateQuery(String QUERY_TWO) {
         System.out.println(QUERY_TWO);
+
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(QUERY_TWO);
             preparedStatement.executeUpdate();

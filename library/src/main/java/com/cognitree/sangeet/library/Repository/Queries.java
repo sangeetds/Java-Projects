@@ -1,6 +1,6 @@
 package com.cognitree.sangeet.library.Repository;
 
-public class Queries {
+public final class Queries {
     public static final String GET_ALL_BOOKS_QUERY = "SELECT * FROM book";
     public static final String GET_AVAILABLE_BOOKS_QUERY = "SELECT FROM book WHERE reserved != 1;";
     public static final String GET_BOOK_QUERY = "SELECT * FROM BOOK WHERE ID = ";

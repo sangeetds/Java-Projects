@@ -7,7 +7,6 @@ import com.cognitree.sangeet.library.Service.LibraryService;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Variant;
 import java.util.Base64;
 
 @Path("/library")
@@ -34,7 +33,7 @@ public class Library {
             return Response.status(401, "Not Authorized").build();
         }
 
-        return Response.ok(libraryService.getAvailableBooks()).build();
+        return Response.ok().entity(libraryService.getAvailableBooks()).build();
     }
 
     @GET

@@ -19,9 +19,8 @@ public class BookRepository {
 
     public List<Book> getAvailableBooks() {
         String query = Queries.GET_AVAILABLE_BOOKS_QUERY;
-        List<Book> books = this.databaseService.executeGetQuery(query);
 
-        return books;
+        return this.databaseService.executeGetQuery(query);
     }
 
     public Book getBook(long id) {
@@ -53,8 +52,6 @@ public class BookRepository {
         this.databaseService.executeUpdateQuery(queryTwo);
 
         List<Book> book = this.databaseService.executeGetQuery(queryOne);
-
-        if (book.isEmpty()) return null;
 
         return book.get(0);
     }

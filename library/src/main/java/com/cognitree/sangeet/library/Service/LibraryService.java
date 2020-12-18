@@ -9,27 +9,22 @@ import java.util.List;
 public class LibraryService {
     private final BookRepository bookRepository = new BookRepository();
 
-    public Book getBook(long id) { return bookRepository.getBook(id); }
+    public Book getBook(long id) { return this.bookRepository.getBook(id); }
 
     public List<Book> getAllBooks() {
-        return bookRepository.getAllBooks();
+        return this.bookRepository.getAllBooks();
     }
 
     public List<Book> getAvailableBooks() {
-        return bookRepository.getAvailableBooks();
+        return this.bookRepository.getAvailableBooks();
     }
 
     public Boolean checkAvailability(long id) {
-        return bookRepository.getBook(id).getReserved();
+        return this.bookRepository.getBook(id).getReserved();
     }
 
     public Book reserveBook(long id) {
-        Book book = bookRepository.updateBook(id, Action.RESERVE);
-        if (book == null) {
-            return null;
-        }
-
-        return book;
+        return this.bookRepository.updateBook(id, Action.RESERVE);
     }
 
     public Book returnBook(long id) {

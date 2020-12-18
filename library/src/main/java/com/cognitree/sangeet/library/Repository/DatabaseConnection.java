@@ -49,8 +49,8 @@ public class DatabaseConnection {
     public static void closeConnection() {
         try {
             connection.close();
-        } catch (SQLException throwables) {
-            printSQLException(throwables);
+        } catch (SQLException throwable) {
+            printSQLException(throwable);
         }
     }
 }
