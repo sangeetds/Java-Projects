@@ -44,8 +44,8 @@ public class BookRepository {
         List<Book> initialBook = this.databaseService.executeGetQuery(queryOne);
 
         if (initialBook.isEmpty() ||
-                (action == Action.RESERVE && initialBook.get(0).getReserved()) ||
-                (action == Action.RETURN && !initialBook.get(0).getReserved())) {
+                (action == Action.RESERVE && initialBook.get(0).getIsReserved()) ||
+                (action == Action.RETURN && !initialBook.get(0).getIsReserved())) {
             return null;
         }
 

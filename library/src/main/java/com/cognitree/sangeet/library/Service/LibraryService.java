@@ -20,7 +20,7 @@ public class LibraryService {
     }
 
     public Boolean checkAvailability(long id) {
-        return this.bookRepository.getBook(id).getReserved();
+        return this.bookRepository.getBook(id).getIsReserved();
     }
 
     public Book reserveBook(long id) {

@@ -13,12 +13,12 @@ public class DatabaseService {
         this.connection = DatabaseConnection.getConnection();
     }
 
-    public List<Book> executeGetQuery(String QUERY) {
+    public List<Book> executeGetQuery(String query) {
         List<Book> initialBookList = new ArrayList<>();
         ResultSet resultSet = null;
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(QUERY);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -46,11 +46,9 @@ public class DatabaseService {
     }
 
 
-    public void executeUpdateQuery(String QUERY_TWO) {
-        System.out.println(QUERY_TWO);
-
+    public void executeUpdateQuery(String query) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(QUERY_TWO);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             DatabaseConnection.printSQLException(e);

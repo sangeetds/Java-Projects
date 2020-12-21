@@ -6,7 +6,7 @@ public class Book {
     private Long id;
     private String title;
     private String author;
-    private Boolean reserved;
+    private Boolean isReserved;
 
     public Book() {
 
@@ -16,14 +16,14 @@ public class Book {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.reserved = false;
+        this.isReserved = false;
     }
 
-    public Book(Long id, String title, String author, Boolean reserved) {
+    public Book(Long id, String title, String author, Boolean isReserved) {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.reserved = reserved;
+        this.isReserved = isReserved;
     }
 
     public Long getId() {
@@ -50,12 +50,12 @@ public class Book {
         this.author = author;
     }
 
-    public Boolean getReserved() {
-        return reserved;
+    public Boolean getIsReserved() {
+        return isReserved;
     }
 
-    public void setReserved(Boolean reserved) {
-        this.reserved = reserved;
+    public void setIsReserved(Boolean isReserved) {
+        this.isReserved = isReserved;
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Book {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", reserved=" + reserved +
+                ", reserved=" + isReserved +
                 '}';
     }
 }

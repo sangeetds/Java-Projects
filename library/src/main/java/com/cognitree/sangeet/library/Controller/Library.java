@@ -18,7 +18,7 @@ public class Library {
     @Path("/books")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBooks(@HeaderParam("Authorization") String user) {
-        if (!decode(user)) {
+        if (!authenticate(user)) {
             return Response.status(401, "Not Authorized").build();
         }
 
@@ -29,7 +29,7 @@ public class Library {
     @Path("/books/available")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAvailableBooks(@HeaderParam("Authorization") String user) {
-        if (!decode(user)) {
+        if (!authenticate(user)) {
             return Response.status(401, "Not Authorized").build();
         }
 
@@ -43,7 +43,7 @@ public class Library {
             @PathParam("id") long id,
             @HeaderParam("Authorization") String user
     ) {
-        if (!decode(user)) {
+        if (!authenticate(user)) {
             return Response.status(401, "Not Authorized").build();
         }
 
@@ -59,12 +59,12 @@ public class Library {
     @PUT
     @Path("/books/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response returnBook(
+    public Response updateBookReservationStatus(
             @PathParam("id") long id,
-            @DefaultValue("reserve") @QueryParam("action") String name,
+            @QueryParam("action") String name,
             @HeaderParam("Authorization") String user
     ) {
-        if (!decode(user)) {
+        if (!authenticate(user)) {
             return Response.status(401, "Not Authorized").build();
         }
 
@@ -81,7 +81,7 @@ public class Library {
         return Response.status(400, "Bad Request").build();
     }
 
-    public boolean decode(String user) {
+    public boolean authenticate(String user) {
         String userPass = user.split(" ")[1];
         String base64 = new String(Base64.getDecoder().decode(userPass));
 
@@ -89,6 +89,6 @@ public class Library {
     }
 
     private boolean authorize(String[] userPass) {
-        return userPass[0].equalsIgnoreCase(Credentials.user) && userPass[1].equalsIgnoreCase(Credentials.user);
+        return userPass[0].equalsIgnoreCase(Credentials.user) && userPass[1].equalsIgnoreCase(Credentials.pass);
     }
 }
