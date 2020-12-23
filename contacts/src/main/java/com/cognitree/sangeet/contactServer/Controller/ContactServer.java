@@ -66,7 +66,11 @@ public class ContactServer {
             return Response.status(401).entity("Not authorized").build();
         }
 
-        return Response.ok(this.contactService.addContact(contact)).build();
+        if (this.contactService.addContact(contact) == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Values not acceptable").build();
+        }
+
+        return Response.ok(contact).build();
     }
 
     @DELETE

@@ -1,6 +1,5 @@
 package com.cognitree.sangeet.contactServer.Repository;
 
-
 import com.cognitree.sangeet.contactServer.Enums.SearchFeature;
 import com.cognitree.sangeet.contactServer.Model.Contact;
 import com.cognitree.sangeet.contactServer.Model.User;
@@ -38,7 +37,6 @@ public class DatabaseRepository {
         String query = (feature.equals(SearchFeature.SEARCH_BY_NAME)) ? Queries.GET_CONTACT_BY_NAME_QUERY + "'%" + id + "%';" :
                 Queries.GET_CONTACT_BY_NUMBER_QUERY + "'%" + id + "%';";
 
-        System.out.println(query);
         List<Contact> contacts = this.databaseService.executeGetContactQuery(query);
 
         if (contacts.isEmpty()) return null;
