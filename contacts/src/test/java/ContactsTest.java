@@ -1,8 +1,9 @@
+import com.cognitree.sangeet.contactServer.Enums.Credentials;
+import com.cognitree.sangeet.contactServer.Repository.DatabaseConnection;
 import org.eclipse.jetty.server.Server;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
@@ -18,16 +19,16 @@ public class ContactsTest {
 
         server.setHandler(context);
 
-        ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/api/*");
+        ServletHolder jerseyServlet = context.addServlet(ServletContainer.class, "/*");
         jerseyServlet.setInitOrder(1);
 
-        jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "com.cognitree.sangeet.library");
+        jerseyServlet.setInitParameter("jersey.config.server.provider.packages", "com.cognitree.sangeet.contactServer");
 
         try {
             server.start();
             server.join();
         } catch (Exception ex) {
-            logger.error("Server cannot be started");
+            logger.error(ex);
         } finally {
             server.destroy();
             DatabaseConnection.closeConnection();

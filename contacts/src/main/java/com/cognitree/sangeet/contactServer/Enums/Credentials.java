@@ -1,4 +1,4 @@
-package com.cognitree.sangeet.Enums;
+package com.cognitree.sangeet.contactServer.Enums;
 
 import java.io.FileInputStream;
 import java.io.IOException;
