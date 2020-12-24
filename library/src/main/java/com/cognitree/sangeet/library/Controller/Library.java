@@ -1,6 +1,6 @@
 package com.cognitree.sangeet.library.Controller;
 
-import com.cognitree.sangeet.library.Enum.Credentials;
+import com.cognitree.sangeet.library.Constants.Credentials;
 import com.cognitree.sangeet.library.Model.Book;
 import com.cognitree.sangeet.library.Service.LibraryService;
 
@@ -17,9 +17,16 @@ public class Library {
     @GET
     @Path("/books")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBooks(@HeaderParam("Authorization") String user) {
+    public Response getBooks(@QueryParam("available") String available, @HeaderParam("Authorization") String user) {
         if (!authenticate(user)) {
             return Response.status(401, "Not Authorized").build();
+        }
+
+        if (available != null) {
+            if (available.equals("true")) {
+                return Response.ok().entity(libraryService.getAvailableBooks()).build();
+            }
+            else return Response.status(400, "Bad Request").build();
         }
 
         return Response.ok().entity(libraryService.getAllBooks()).build();

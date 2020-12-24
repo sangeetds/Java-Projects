@@ -1,10 +1,12 @@
 package com.cognitree.sangeet.library.Repository;
 
 import com.cognitree.sangeet.library.Model.Book;
+import com.cognitree.sangeet.library.Constants.TableFields;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class DatabaseService {
     private final Connection connection;
@@ -22,10 +24,10 @@ public class DatabaseService {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String title = resultSet.getString("title");
-                String author = resultSet.getString("author");
-                Boolean reserved = resultSet.getInt("reserved") == 1;
+                int id = resultSet.getInt(TableFields.id);
+                String title = resultSet.getString(TableFields.title);
+                String author = resultSet.getString(TableFields.author);
+                Boolean reserved = resultSet.getInt(TableFields.reserved) == 1;
 
                 Book newBook = new Book((long) id, title, author, reserved);
                 initialBookList.add(newBook);

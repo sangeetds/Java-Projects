@@ -1,6 +1,6 @@
 package com.cognitree.sangeet.library.Repository;
 
-import com.cognitree.sangeet.library.Enum.Credentials;
+import com.cognitree.sangeet.library.Constants.Credentials;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

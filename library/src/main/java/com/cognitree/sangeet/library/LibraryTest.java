@@ -1,6 +1,6 @@
 package com.cognitree.sangeet.library;
 
-import com.cognitree.sangeet.library.Enum.Credentials;
+import com.cognitree.sangeet.library.Constants.Credentials;
 import com.cognitree.sangeet.library.Repository.DatabaseConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +16,7 @@ public class LibraryTest {
         Server server = new Server(Credentials.port);
 
         ServletContextHandler context = new ServletContextHandler();
-        context.setContextPath("/");
+        context.setContextPath(Credentials.contextPath);
 
         server.setHandler(context);
 

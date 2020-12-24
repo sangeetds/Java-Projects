@@ -1,4 +1,4 @@
-package com.cognitree.sangeet.library.Enum;
+package com.cognitree.sangeet.library.Constants;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +12,7 @@ public interface Credentials {
     String jdbcUrl = properties.getProperty("jdbcUrl");
     String jdbcUser = properties.getProperty("jdbcUser");
     String jdbcPass = properties.getProperty("jdbcPass");
+    String contextPath = properties.getProperty("contextPath");
 
     static Properties readPropertiesFile(String fileName) {
         FileInputStream file = null;
