@@ -1,4 +1,4 @@
-import com.cognitree.sangeet.contactServer.Enums.Credentials;
+import com.cognitree.sangeet.contactServer.Enums.ContactServerProperties;
 import com.cognitree.sangeet.contactServer.Repository.DatabaseConnection;
 import org.eclipse.jetty.server.Server;
 
@@ -12,7 +12,7 @@ public class ContactsTest {
     public static void main(String[] args) {
         Logger logger = LogManager.getLogger(ContactsTest.class.getName());
 
-        Server server = new Server(Credentials.port);
+        Server server = new Server(ContactServerProperties.port);
 
         ServletContextHandler context = new ServletContextHandler();
         context.setContextPath("/");

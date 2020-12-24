@@ -1,8 +1,8 @@
 package com.cognitree.sangeet.contactServer.Controller;
 
 
-import com.cognitree.sangeet.contactServer.Enums.Credentials;
 import com.cognitree.sangeet.contactServer.Model.Contact;
+import com.cognitree.sangeet.contactServer.Model.User;
 import com.cognitree.sangeet.contactServer.Service.ContactService;
 import com.cognitree.sangeet.contactServer.Service.UserService;
 
@@ -22,11 +22,12 @@ public class ContactServer {
     @Path("/contacts")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllContacts(@HeaderParam("Authorization") String loginDetails) {
-        if (!authenticate(loginDetails)) {
+        User currentUser = authenticate(loginDetails);
+        if (currentUser == null) {
             return Response.status(401).entity("Not authorized").build();
         }
 
-        return Response.ok(contactService.getAllContacts()).build();
+        return Response.ok(contactService.getAllContacts(currentUser.getId())).build();
     }
 
     @GET
@@ -36,16 +37,17 @@ public class ContactServer {
             @QueryParam("search") String searchValue,
             @QueryParam("value") String value,
             @HeaderParam("Authorization") String loginDetails) {
-        if (!authenticate(loginDetails)) {
+        User currentUser = authenticate(loginDetails);
+        if (currentUser == null) {
             return Response.status(401).entity("Not authorized").build();
         }
 
         List<Contact> contactList;
 
         if (searchValue.equals("name")) {
-            contactList = this.contactService.getContactByName(value);
+            contactList = this.contactService.getContactByName(value, currentUser.getId());
         }
-        else if (searchValue.equals("number")) contactList = this.contactService.getContactByNumber(value);
+        else if (searchValue.equals("number")) contactList = this.contactService.getContactByNumber(value, currentUser.getId());
         else {
             return Response.status(Response.Status.BAD_REQUEST).entity("Wrong query params").build();
         }
@@ -62,10 +64,12 @@ public class ContactServer {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addContact(@HeaderParam("Authorization") String loginDetails, Contact contact) {
-        if (!authenticate(loginDetails)) {
+        User currentUser = authenticate(loginDetails);
+        if (currentUser == null) {
             return Response.status(401).entity("Not authorized").build();
         }
 
+        contact.setUserId(currentUser.getId());
         if (this.contactService.addContact(contact) == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Values not acceptable").build();
         }
@@ -74,25 +78,34 @@ public class ContactServer {
     }
 
     @DELETE
-    @Path("/contacts/{userId}")
+    @Path("/contacts/{number}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteContact(@PathParam("userId") long id, @HeaderParam("Authorization") String loginDetails) {
-        if (!authenticate(loginDetails)) {
+    public Response deleteContact(@PathParam("number") long number, @HeaderParam("Authorization") String loginDetails) {
+        User currentUser = authenticate(loginDetails);
+        if (currentUser == null) {
             return Response.status(401).entity("Not authorized").build();
         }
 
-        if (this.contactService.deleteContact(id)) {
+        if (this.contactService.deleteContact(number, currentUser.getId())) {
             return Response.ok().build();
         }
 
         return Response.status(Response.Status.BAD_REQUEST).entity("No such contact").build();
     }
 
-    public boolean authenticate(String authDetails) {
-        if (authDetails == null) return false;
+    public User authenticate(String authDetails) {
+        if (authDetails == null) return null;
         String[] decodedValue = decode(authDetails).split(":");
 
-        return decodedValue[0].equalsIgnoreCase(Credentials.user) && decodedValue[1].equalsIgnoreCase(Credentials.pass);
+        List<User> users = this.userService.getAllUser();
+
+        for (User possibleUser: users) {
+            if (possibleUser.getName().equals(decodedValue[0]) && possibleUser.getPass().equals(decodedValue[1])) {
+                return possibleUser;
+            }
+        }
+
+        return null;
     }
 
     public String decode(String encodedValue) {

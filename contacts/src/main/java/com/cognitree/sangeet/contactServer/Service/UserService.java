@@ -14,4 +14,16 @@ public class UserService {
     public List<User> getAllUser() {
         return this.userRepository.getAllUsers();
     }
+
+    public User addUser(User user) {
+        if (!this.userRepository.addUser(user)) {
+            return null;
+        }
+
+        return user;
+    }
+
+    public boolean deleteUser(long id) {
+        return this.userRepository.deleteUser(id);
+    }
 }

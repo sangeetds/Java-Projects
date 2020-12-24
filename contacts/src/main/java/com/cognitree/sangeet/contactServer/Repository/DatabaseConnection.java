@@ -1,6 +1,6 @@
 package com.cognitree.sangeet.contactServer.Repository;
 
-import com.cognitree.sangeet.contactServer.Enums.Credentials;
+import com.cognitree.sangeet.contactServer.Enums.ContactServerProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,9 +23,9 @@ public class DatabaseConnection {
         }
 
         try {
-            String jdbcURL = Credentials.jdbcUrl;
-            String jdbcUsername = Credentials.jdbcUser;
-            String jdbcPassword = Credentials.jdbcPass;
+            String jdbcURL = ContactServerProperties.jdbcUrl;
+            String jdbcUsername = ContactServerProperties.jdbcUser;
+            String jdbcPassword = ContactServerProperties.jdbcPass;
             connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
             System.out.println("Connection made successfully.");
         } catch (SQLException e) {

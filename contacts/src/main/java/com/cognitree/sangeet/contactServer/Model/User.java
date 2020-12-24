@@ -6,16 +6,16 @@ import java.util.Objects;
 public class User {
     private long id;
     private String name;
-    private List<Contact> contactsList;
+    private String pass;
 
     public User() {
 
     }
 
-    public User(long id, String name, List<Contact> contactsList) {
+    public User(long id, String name, String pass) {
         this.id = id;
         this.name = name;
-        this.contactsList = contactsList;
+        this.pass = pass;
     }
 
     public long getId() {
@@ -34,12 +34,12 @@ public class User {
         this.name = name;
     }
 
-    public List<Contact> getContactsList() {
-        return contactsList;
+    public String getPass() {
+        return pass;
     }
 
-    public void setContactsList(List<Contact> contactsList) {
-        this.contactsList = contactsList;
+    public void setPass(String pass) {
+        this.pass = pass;
     }
 
     @Override
@@ -47,19 +47,20 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return name.equals(user.name) && contactsList.equals(user.contactsList);
+        return id == user.id && name.equals(user.name) && pass.equals(user.pass);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, contactsList);
+        return Objects.hash(id, name, pass);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "name='" + name + '\'' +
-                ", contactsList=" + contactsList +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", pass='" + pass + '\'' +
                 '}';
     }
 }

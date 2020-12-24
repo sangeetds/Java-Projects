@@ -76,17 +76,18 @@ public class Contact {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        return phoneNumber == contact.phoneNumber && name.equals(contact.name) && address.equals(contact.address) && birthDate.equals(contact.birthDate) && email.equals(contact.email);
+        return userId == contact.userId && phoneNumber == contact.phoneNumber && name.equals(contact.name) && address.equals(contact.address) && birthDate.equals(contact.birthDate) && email.equals(contact.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, phoneNumber, address, birthDate, email);
+        return Objects.hash(userId, name, phoneNumber, address, birthDate, email);
     }
 
     @Override
     public String toString() {
         return "Contact{" +
+                "userId='" + userId + '\'' +
                 "name='" + name + '\'' +
                 ", phoneNumber=" + phoneNumber +
                 ", address='" + address + '\'' +

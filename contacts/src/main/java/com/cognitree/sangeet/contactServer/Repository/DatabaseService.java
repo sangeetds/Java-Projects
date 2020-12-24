@@ -26,10 +26,10 @@ public class DatabaseService {
 
             while (resultSet.next()) {
                 long id = resultSet.getLong("id");
-                String name = resultSet.getString("title");
-                List<Contact> contacts = Arrays.stream(resultSet.getString("contacts").split(",")).map(c -> new Contact()).collect(Collectors.toList());
+                String name = resultSet.getString("name");
+                String pass = resultSet.getString("pass");
 
-                User newUser = new User(id, name, contacts);
+                User newUser = new User(id, name, pass);
                 userList.add(newUser);
             }
         } catch (SQLException e) {
@@ -102,6 +102,25 @@ public class DatabaseService {
             preparedStatement.setString(4, contact.getAddress());
             preparedStatement.setString(5, contact.getBirthDate());
             preparedStatement.setString(6, contact.getEmail());
+
+            preparedStatement.executeUpdate();
+        }
+        catch (SQLException ex) {
+            DatabaseConnection.printSQLException(ex);
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean addUser(User user) {
+        String query = Queries.ADD_USER_QUERY;
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setString(2, user.getName());
+            preparedStatement.setString(6, user.getPass());
 
             preparedStatement.executeUpdate();
         }
