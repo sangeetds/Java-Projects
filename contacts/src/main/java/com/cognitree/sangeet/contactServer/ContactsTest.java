@@ -1,3 +1,5 @@
+package com.cognitree.sangeet.contactServer;
+
 import com.cognitree.sangeet.contactServer.Enums.ContactServerProperties;
 import com.cognitree.sangeet.contactServer.Repository.DatabaseConnection;
 import org.eclipse.jetty.server.Server;

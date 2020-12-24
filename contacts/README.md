@@ -31,3 +31,9 @@ You can then add new contacts, by sending a POST request, comprising of JSON obj
 to the address <br/>
 
 `http://localhost:8080/api/contacts/`
+
+# Running the app
+
+Please make sure you have the Java 8 installed and configured in your system. 
+Compile and run the `ContactsTest` java file in the `contacts/src/main/java/com/cognitree/sangeet` folder to run the folder and database subsequently. <br/>
+After that you can proceed with making API calls.

@@ -13,7 +13,7 @@ import java.util.Base64;
 import java.util.List;
 
 @Path("/api")
-public class ContactServer {
+public class ContactResource {
 
     private final ContactService contactService = new ContactService();
     private final UserService userService = new UserService();

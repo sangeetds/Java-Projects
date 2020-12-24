@@ -13,7 +13,7 @@ public interface ContactServerProperties {
     String jdbcPass = properties.getProperty("jdbcPass");
 
     static java.util.Properties readPropertiesFile(String fileName) {
-        try (InputStream input = new FileInputStream("path/to/config.properties")) {
+        try (InputStream input = new FileInputStream("config.properties")) {
             Properties prop = new Properties();
             prop.load(input);
             return prop;
