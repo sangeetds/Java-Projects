@@ -18,20 +18,34 @@ public class ContactServer {
     private final ContactService contactService = new ContactService();
     private final UserService userService = new UserService();
 
-    @GET
-    @Path("/contacts")
+    @POST
+    @Path("/user")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllContacts(@HeaderParam("Authorization") String loginDetails) {
+    public Response addUser(User user) {
+        User newUser = this.userService.addUser(user);
+
+        return Response.ok(newUser).build();
+    }
+
+    @DELETE
+    @Path("/user/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteUser(
+            @PathParam("id") long id,
+            @HeaderParam("Authorization") String loginDetails
+    ) {
         User currentUser = authenticate(loginDetails);
-        if (currentUser == null) {
+        if (currentUser == null || currentUser.getId() != id) {
             return Response.status(401).entity("Not authorized").build();
         }
 
-        return Response.ok(contactService.getAllContacts(currentUser.getId())).build();
+        this.userService.deleteUser(id);
+
+        return Response.ok().build();
     }
 
     @GET
-    @Path("/contacts/filter")
+    @Path("/contacts")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getContact(
             @QueryParam("search") String searchValue,
@@ -44,7 +58,10 @@ public class ContactServer {
 
         List<Contact> contactList;
 
-        if (searchValue.equals("name")) {
+        if (searchValue == null || value == null) {
+            return Response.ok(this.contactService.getAllContacts(currentUser.getId())).build();
+        }
+        else if (searchValue.equals("name")) {
             contactList = this.contactService.getContactByName(value, currentUser.getId());
         }
         else if (searchValue.equals("number")) contactList = this.contactService.getContactByNumber(value, currentUser.getId());

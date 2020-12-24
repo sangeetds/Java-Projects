@@ -39,7 +39,7 @@ public class DatabaseRepository {
 
     public boolean deleteContact(long number, long id) {
         String query = Queries.DELETE_CONTACT_QUERY + number + "and userId = " + id + ";";
-        return this.databaseService.deleteContact(query) > 0;
+        return this.databaseService.executeDeleteQuery(query) > 0;
     }
 
     public List<User> getAllUsers() {
@@ -62,6 +62,6 @@ public class DatabaseRepository {
 
     public boolean deleteUser(long id) {
         String query = Queries.DELETE_USER_QUERY + id + ";";
-        return this.databaseService.deleteContact(query) > 0;
+        return this.databaseService.executeDeleteQuery(query) > 0;
     }
 }

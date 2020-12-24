@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class DatabaseService {
@@ -132,7 +133,7 @@ public class DatabaseService {
         return true;
     }
 
-    public int deleteContact(String query) {
+    public int executeDeleteQuery(String query) {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             return preparedStatement.executeUpdate();

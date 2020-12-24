@@ -16,6 +16,9 @@ public class UserService {
     }
 
     public User addUser(User user) {
+        int size = this.userRepository.getAllUsers().size();
+        user.setId(size);
+
         if (!this.userRepository.addUser(user)) {
             return null;
         }
