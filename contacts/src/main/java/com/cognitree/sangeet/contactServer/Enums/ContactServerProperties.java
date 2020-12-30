@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Interface to load properties from the `.config` file.
+ */
 public interface ContactServerProperties {
     java.util.Properties properties = readPropertiesFile("config.properties");
     int port = Integer.parseInt(properties.getProperty("port"));
@@ -13,7 +16,7 @@ public interface ContactServerProperties {
     String jdbcPass = properties.getProperty("jdbcPass");
 
     static java.util.Properties readPropertiesFile(String fileName) {
-        try (InputStream input = new FileInputStream("config.properties")) {
+        try (InputStream input = new FileInputStream(fileName)) {
             Properties prop = new Properties();
             prop.load(input);
             return prop;

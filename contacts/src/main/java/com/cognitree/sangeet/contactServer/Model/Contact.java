@@ -2,6 +2,10 @@ package com.cognitree.sangeet.contactServer.Model;
 
 import java.util.Objects;
 
+/**
+ * Plain Old Java Object class which holds information regarding a particular contact of
+ * a user.
+ */
 public class Contact {
     private long userId;
     private String name;
@@ -12,6 +16,14 @@ public class Contact {
 
     public Contact() {
 
+    }
+
+    public Contact(String name, long phoneNumber, String address, String birthDate, String email) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.birthDate = birthDate;
+        this.email = email;
     }
 
     public Contact(long userId, String name, long phoneNumber, String address, String birthDate, String email) {

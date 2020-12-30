@@ -5,6 +5,10 @@ import com.cognitree.sangeet.contactServer.Repository.DatabaseRepository;
 
 import java.util.List;
 
+/**
+ * Class to interact with the controller and the database to provide ease of operation
+ * between the two. This class handles all the activities related to users.
+ */
 public class UserService {
 
     private final DatabaseRepository userRepository = new DatabaseRepository();

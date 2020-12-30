@@ -10,9 +10,9 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.servlet.ServletContainer;
 
-public class ContactsTest {
+public class ContactsServer {
     public static void main(String[] args) {
-        Logger logger = LogManager.getLogger(ContactsTest.class.getName());
+        Logger logger = LogManager.getLogger(ContactsServer.class.getName());
 
         Server server = new Server(ContactServerProperties.port);
 

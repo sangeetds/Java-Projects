@@ -6,7 +6,14 @@ import com.cognitree.sangeet.contactServer.Model.User;
 
 import java.util.*;
 
+/**
+ * Repository class which facilitates interaction with the database and provide some
+ * additional required operations.
+ */
 public class DatabaseRepository {
+    /**
+     * Object that deals with database operations.
+     */
     private final DatabaseService databaseService;
 
     public DatabaseRepository() {

@@ -1,5 +1,8 @@
 package com.cognitree.sangeet.contactServer.Repository;
 
+/**
+ * Interface to contain pre-defined queries for ease of database transactions.
+ */
 public interface Queries {
     String GET_USER_QUERY = "SELECT * FROM USER WHERE ID =";
     String GET_ALL_USER_QUERY = "SELECT * FROM user";

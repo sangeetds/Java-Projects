@@ -35,5 +35,13 @@ to the address <br/>
 # Running the app
 
 Please make sure you have the Java 8 installed and configured in your system. 
+Inside the directory, run the command:- 
+`mvn clean install` <br/>
+so that all the dependencies are installed. 
+
+
 Compile and run the `ContactsTest` java file in the `contacts/src/main/java/com/cognitree/sangeet` folder to run the folder and database subsequently. <br/>
 After that you can proceed with making API calls.
+
+
+

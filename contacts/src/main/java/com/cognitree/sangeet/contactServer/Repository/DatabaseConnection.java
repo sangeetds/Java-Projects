@@ -8,6 +8,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Class to instantiate connection with the database and finally close the connection.
+ * Is made in respect to Singleton Pattern such that only one instance of the class
+ * exists in the whole project.
+ */
 public class DatabaseConnection {
 
     static Connection connection;
@@ -17,6 +22,10 @@ public class DatabaseConnection {
 
     }
 
+    /**
+     * Function to connect with the database.
+     * @return Connection object which can be later used to interact with the database.
+     */
     public static Connection getConnection() {
         if (connection != null) {
             return connection;
@@ -35,6 +44,10 @@ public class DatabaseConnection {
         return connection;
     }
 
+    /**
+     * Function to log any error messages.
+     * @param ex the exception encountered.
+     */
     public static void printSQLException(SQLException ex) {
         for (Throwable e: ex) {
             if (e instanceof SQLException) {
@@ -51,6 +64,9 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * Function to finally close the connection to database to avoid memory leakages.
+     */
     public static void closeConnection() {
         try {
             connection.close();

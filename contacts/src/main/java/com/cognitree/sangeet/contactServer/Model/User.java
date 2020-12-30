@@ -1,8 +1,11 @@
 package com.cognitree.sangeet.contactServer.Model;
 
-import java.util.List;
 import java.util.Objects;
 
+/**
+ * Plain Old Java Object which holds information about a particular user required to
+ * authenticate and operate with contacts.
+ */
 public class User {
     private long id;
     private String name;

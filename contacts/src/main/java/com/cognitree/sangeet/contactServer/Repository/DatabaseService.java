@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Service class that helps executing queries and getting results from the database
+ */
 public class DatabaseService {
     private final Connection connection;
 
