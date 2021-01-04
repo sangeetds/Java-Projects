@@ -31,7 +31,7 @@ class SalesPerson
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId($id): void
     {
         $this->id = $id;
     }
@@ -47,7 +47,7 @@ class SalesPerson
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -63,8 +63,13 @@ class SalesPerson
     /**
      * @param bool $active
      */
-    public function setActive(bool $active)
+    public function setActive(bool $active): void
     {
         $this->active = $active;
+    }
+
+    public static function isSalesPersonActive(SalesPerson $salesPerson): bool
+    {
+        return $salesPerson->active;
     }
 }
