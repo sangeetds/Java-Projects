@@ -31,6 +31,7 @@ gradle
 gradlew.bat
 settings.gradle
 build.gradle
+*.iml
 library/target
 library/hsqldb-2.5.1
 library/jdbc:hsqldb:hsql:

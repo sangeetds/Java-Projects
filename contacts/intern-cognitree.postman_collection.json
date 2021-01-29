@@ -1,0 +1,565 @@
+{
+	"info": {
+		"_postman_id": "81fe3085-8107-4ac5-887a-5b6291e5fb04",
+		"name": "intern-cognitree",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/api/contacts/1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "use",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"name\": \"Girish\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"IndirNagar\",\n    \"birthDate\": \"5th November\",\n    \"email\": \"girish@cognitree.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts",
+						"1"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/contacts/1",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"name\": \"Girish\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"IndirNagar\",\n    \"birthDate\": \"5th November\",\n    \"email\": \"girish@cognitree.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts",
+						"1"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/contacts/filter?search=number&value=999999999",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"name\": \"Girish\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"IndirNagar\",\n    \"birthDate\": \"5th November\",\n    \"email\": \"girish@cognitree.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts/filter?search=number&value=999999999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts",
+						"filter"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "number"
+						},
+						{
+							"key": "value",
+							"value": "999999999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/contacts/filter?search=number&value=9999999999",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"name\": \"Girish\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"IndirNagar\",\n    \"birthDate\": \"5th November\",\n    \"email\": \"girish@cognitree.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts/filter?search=number&value=9999999999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts",
+						"filter"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						},
+						{
+							"key": "search",
+							"value": "number"
+						},
+						{
+							"key": "value",
+							"value": "9999999999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/contacts/filter?search=name&value=Gir",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"name\": \"Girish\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"IndirNagar\",\n    \"birthDate\": \"5th November\",\n    \"email\": \"girish@cognitree.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts/filter?search=name&value=Gir",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts",
+						"filter"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "name"
+						},
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						},
+						{
+							"key": "value",
+							"value": "Gir"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/contacts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"name\": \"Girish\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"IndirNagar\",\n    \"birthDate\": \"5th November\",\n    \"email\": \"girish@cognitree.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/contacts",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 1,\n    \"name\": \"Girish\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"IndirNagar\",\n    \"birthDate\": \"5th November\",\n    \"email\": \"girish@cognitree.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/api/contacts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "user",
+						"value": "user",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "pass",
+						"value": "pass",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userId\": 999,\n    \"name\": \"content\",\n    \"phoneNumber\": 999999999,\n    \"address\": \"a\",\n    \"birtate\": \"b\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/contacts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"contacts"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "return",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
