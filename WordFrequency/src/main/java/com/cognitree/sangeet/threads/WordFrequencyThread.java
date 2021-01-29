@@ -30,7 +30,7 @@ public class WordFrequencyThread extends WordFrequency {
     }
 
     @Override
-    public void countEveryWords(DataBatch dataBatch) {
+    public void countEveryWords(DataBatch<String> dataBatch) {
         long time = System.nanoTime();
         long total = 0;
 

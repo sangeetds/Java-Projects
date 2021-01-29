@@ -17,6 +17,9 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.TimeUnit;
 
 public class ProcessExecutor {
+    private final int batchSize = 75000;
+    private final int sleepTime = 1000;
+
     public void sequentialProcess(BufferedReader fileScanner, WordFrequencySequential wordFrequencySequential) {
         String currentLine = null;
         long time = System.nanoTime();
@@ -40,9 +43,9 @@ public class ProcessExecutor {
 
     public void startThreadProcess(BufferedReader fileScanner, WordFrequencyThread wordFrequencyThread) throws InterruptedException {
         List<Thread> workerThreads = new ArrayList<>();
-        List<DataBatch> batches = new ArrayList<>();
+        List<DataBatch<String>> batches = new ArrayList<>();
         int threadIndex = 0;
-        batches.add(new DataBatch());
+        batches.add(new DataBatch<>());
 
         long time = System.nanoTime();
 
@@ -56,15 +59,15 @@ public class ProcessExecutor {
 
             batches.get(threadIndex).add(currentLine);
 
-            if (batches.get(threadIndex).getSize() >= 75000) {
-                DataBatch currBatch = batches.get(threadIndex);
+            if (batches.get(threadIndex).getSize() >= this.batchSize) {
+                DataBatch<String> currBatch = batches.get(threadIndex);
                 workerThreads.add(new Thread(() -> wordFrequencyThread.countEveryWords(currBatch)));
                 workerThreads.get(threadIndex++).start();
-                batches.add(new DataBatch());
+                batches.add(new DataBatch<>());
             }
         }
 
-        DataBatch currBatch = batches.get(threadIndex);
+        DataBatch<String> currBatch = batches.get(threadIndex);
         workerThreads.add(new Thread(() -> wordFrequencyThread.countEveryWords(currBatch)));
         workerThreads.get(threadIndex).start();
 
@@ -80,9 +83,9 @@ public class ProcessExecutor {
 
     public void startThreadPoolProcess(BufferedReader fileScanner, WordFrequencyThreadPool wordFrequencyThreadPool) throws InterruptedException {
         ExecutorService exService = Executors.newFixedThreadPool(4);
-        List<DataBatch> batches = new ArrayList<>();
+        List<DataBatch<String>> batches = new ArrayList<>();
         int threadIndex = 0;
-        batches.add(new DataBatch());
+        batches.add(new DataBatch<>());
 
         long time = System.nanoTime();
 
@@ -96,27 +99,27 @@ public class ProcessExecutor {
 
             batches.get(threadIndex).add(currentLine);
 
-            if (batches.get(threadIndex).getSize() >= 75000) {
-                DataBatch currBatch = batches.get(threadIndex);
+            if (batches.get(threadIndex).getSize() >= this.batchSize) {
+                DataBatch<String> currBatch = batches.get(threadIndex);
                 exService.submit(() -> wordFrequencyThreadPool.countEveryWords(currBatch));
-                batches.add(new DataBatch());
+                batches.add(new DataBatch<>());
                 threadIndex++;
             }
         }
 
-        DataBatch currBatch = batches.get(threadIndex);
+        DataBatch<String> currBatch = batches.get(threadIndex);
         exService.submit(() -> wordFrequencyThreadPool.countEveryWords(currBatch));
 
         System.out.println("Time taken for processing the file : " + (System.nanoTime() - time) / 1_000_000_000d);
 
         time = System.nanoTime();
         exService.shutdown();
-        exService.awaitTermination(5000, TimeUnit.MILLISECONDS);
+        exService.awaitTermination(this.sleepTime, TimeUnit.MILLISECONDS);
 
         pollData(wordFrequencyThreadPool, batches, time);
     }
 
-    private void pollData(WordFrequencyThread wordFrequencyThread, List<DataBatch> batches, long timeB) {
+    private void pollData(WordFrequencyThread wordFrequencyThread, List<DataBatch<String>> batches, long timeB) {
         System.out.println("Time taken for getting the frequency(whole): " + (System.nanoTime() - timeB) / 1_000_000_000d);
 
         long time = System.nanoTime();

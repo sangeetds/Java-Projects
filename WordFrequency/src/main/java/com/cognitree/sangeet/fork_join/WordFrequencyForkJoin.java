@@ -11,7 +11,7 @@ import java.util.function.Function;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
 
-public class WordFrequencyForkJoin extends RecursiveTask<HashMap<String, Long>> {
+public class  WordFrequencyForkJoin extends RecursiveTask<HashMap<String, Long>> {
     private final List<String> hay;
     private final Map<String, Long> wordCountMap;
     private final int lowerBound;
