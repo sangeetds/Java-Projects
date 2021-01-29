@@ -1,12 +1,8 @@
 package com.cognitree.sangeet.threads;
 
 import com.cognitree.sangeet.DataBatch;
-import com.cognitree.sangeet.threads.WordFrequencyThread;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.Date;
-import java.util.concurrent.*;
 
 public class WordFrequencyThreadPool extends WordFrequencyThread {
 
@@ -30,7 +26,7 @@ public class WordFrequencyThreadPool extends WordFrequencyThread {
         super.put(word, frequency);
     }
 
-    public void countEveryWords(DataBatch dataBatch) {
+    public void countEveryWords(DataBatch<String> dataBatch) {
         super.countEveryWords(dataBatch);
     }
 }

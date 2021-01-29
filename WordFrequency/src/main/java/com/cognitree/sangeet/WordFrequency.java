@@ -1,7 +1,6 @@
 package com.cognitree.sangeet;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -12,7 +11,7 @@ public abstract class WordFrequency {
 
     abstract public Long getFrequency(String word) throws Exception;
 
-    abstract public void countEveryWords(DataBatch dataBatch);
+    abstract public void countEveryWords(DataBatch<String> dataBatch);
 
     public Map<String, Long> calculateFrequency(String dataLine) {
         return Arrays

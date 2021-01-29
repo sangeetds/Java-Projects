@@ -20,7 +20,7 @@ public class WordFrequencyThreadTest {
         BufferedReader fileScanner;
 
         try {
-            fileScanner = new BufferedReader(new InputStreamReader(new FileInputStream("another.txt"), StandardCharsets.UTF_8));
+            fileScanner = new BufferedReader(new InputStreamReader(new FileInputStream("sample 2.txt"), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             return null;

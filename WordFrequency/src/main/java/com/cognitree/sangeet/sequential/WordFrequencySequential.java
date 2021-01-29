@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class WordFrequencySequential extends WordFrequency {
     private final List<String> hay;
-    private final Map<String, Long> frequencyMap;
+    public final Map<String, Long> frequencyMap;
 
     public WordFrequencySequential() {
         this.hay = new ArrayList<>();
@@ -32,8 +32,10 @@ public class WordFrequencySequential extends WordFrequency {
     }
 
     @Override
-    public void countEveryWords(DataBatch dataBatch) {
-        this.hay.forEach((dataLine) -> super.calculateFrequency(dataLine).forEach((word, frequency) -> this.frequencyMap.put(word, this.frequencyMap.getOrDefault(word, 0L) + frequency)));
+    public void countEveryWords(DataBatch<String> dataBatch) {
+        this.hay.forEach((dataLine) -> super.calculateFrequency(dataLine).forEach((word, frequency) -> {
+            this.frequencyMap.put(word, this.frequencyMap.getOrDefault(word, 0L) + frequency);
+        }));
     }
 
     public int getSize() {
