@@ -23,14 +23,11 @@
 hs_err_pid*
 
 out
-*.DS_Store
-*.gradle
-*.idea
+.DS_Store
+.gradle
+.idea
 gradlew
 gradle
 gradlew.bat
 settings.gradle
 build.gradle
-library/target
-library/hsqldb-2.5.1
-library/jdbc:hsqldb:hsql:
