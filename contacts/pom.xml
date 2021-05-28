@@ -123,7 +123,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.test-framework</groupId>
             <artifactId>jersey-test-framework-core</artifactId>
-            <version>2.6</version>
+            <version>3.0.2</version>
         </dependency>
     </dependencies>
 
