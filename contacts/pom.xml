@@ -89,7 +89,7 @@
         <dependency>
             <groupId>org.jdbi</groupId>
             <artifactId>jdbi3-sqlobject</artifactId>
-            <version>3.20.0</version>
+            <version>3.20.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
         <dependency>
