@@ -42,32 +42,32 @@
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-jetty-http</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-jetty-servlet</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
@@ -77,7 +77,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jdbi/jdbi3-core -->
         <dependency>
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>org.glassfish.jersey.test-framework</groupId>
             <artifactId>jersey-test-framework-core</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.9</version>
         </dependency>
     </dependencies>
 
